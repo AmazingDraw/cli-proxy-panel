@@ -37,6 +37,14 @@ export function isXaiFile(file: AuthFileItem): boolean {
   return resolveAuthProvider(file) === 'xai';
 }
 
+export function isCursorFile(file: AuthFileItem): boolean {
+  return resolveAuthProvider(file) === 'cursor';
+}
+
+export function isClineFile(file: AuthFileItem): boolean {
+  return resolveAuthProvider(file) === 'cline';
+}
+
 /** Providers rendered by a dedicated built-in quota card. */
 export const BUILT_IN_QUOTA_PROVIDERS: ReadonlySet<string> = new Set([
   'antigravity',

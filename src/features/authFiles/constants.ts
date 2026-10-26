@@ -13,6 +13,8 @@ import iconKimiDark from '@/assets/icons/kimi-dark.svg';
 import iconKimiLight from '@/assets/icons/kimi-light.svg';
 import iconQwen from '@/assets/icons/qwen.svg';
 import iconVertex from '@/assets/icons/vertex.svg';
+import iconCursor from '@/assets/icons/cursor.svg';
+import iconCline from '@/assets/icons/cline.png';
 import type { AuthFileItem, ResolvedTheme, ThemeColors } from '@/types';
 import { normalizeOAuthProviderKey } from '@/utils/providerKeys';
 import { parseTimestamp } from '@/utils/timestamp';
@@ -35,7 +37,9 @@ export type QuotaProviderType =
   | 'kimi'
   | 'meta'
   | 'plugin'
-  | 'xai';
+  | 'xai'
+  | 'cursor'
+  | 'cline';
 export type AuthFileQuotaFilter = string | null;
 export type OAuthConfigLoadError = 'loading' | 'unsupported' | 'load' | null;
 
@@ -48,6 +52,8 @@ export const QUOTA_PROVIDER_TYPES = new Set<QuotaProviderType>([
   'kimi',
   'plugin',
   'xai',
+  'cursor',
+  'cline',
 ]);
 
 export const OAUTH_PROVIDER_PRESETS = [
@@ -60,6 +66,8 @@ export const OAUTH_PROVIDER_PRESETS = [
   'codex',
   'devin',
   'kimi',
+  'cursor',
+  'cline',
 ];
 
 const OAUTH_PROVIDER_EXCLUDES = new Set(['all', 'unknown', 'empty']);
@@ -76,9 +84,11 @@ export const AUTH_FILE_MANUAL_REFRESH_PROVIDERS = new Set([
   'meta',
   'antigravity',
   'claude',
+  'cline',
   'codex',
   'kimi',
   'xai',
+  'cursor',
 ]);
 
 // 标签类型颜色配置：权威版本在 @/utils/quota/constants.ts，此处仅转发
@@ -97,6 +107,8 @@ export const AUTH_FILE_ICONS: Record<string, AuthFileIconAsset> = {
   kimi: { light: iconKimiDark, dark: iconKimiLight },
   qwen: iconQwen,
   vertex: iconVertex,
+  cursor: iconCursor,
+  cline: iconCline,
 };
 
 export const clampCardPageSize = (value: number) =>

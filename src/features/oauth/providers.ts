@@ -1,9 +1,5 @@
 import type { BuiltInOAuthProvider } from '@/services/api';
 import { getPluginTitle, resolvePluginAssetURL } from '@/features/plugins/pluginResources';
-import {
-  KIMI_CHINESE_AFFILIATE_URL,
-  KIMI_INTERNATIONAL_AFFILIATE_URL,
-} from '@/features/providers/kimi';
 import type { PluginListEntry } from '@/types';
 import iconMeta from '@/assets/icons/meta.svg';
 import iconCodex from '@/assets/icons/codex.svg';
@@ -16,6 +12,8 @@ import iconGrok from '@/assets/icons/grok.svg';
 import iconGrokDark from '@/assets/icons/grok-dark.svg';
 import iconDevin from '@/assets/icons/devin.svg';
 import iconDevinDark from '@/assets/icons/devin-dark.svg';
+import iconCursor from '@/assets/icons/cursor.svg';
+import iconCline from '@/assets/icons/cline.png';
 
 export type ThemedIcon = string | { light: string; dark: string };
 
@@ -64,7 +62,6 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
     icon: { light: iconKimiTileBlack, dark: iconKimiTileWhite },
     flow: 'device',
     domain: 'kimi.com',
-    sponsor: { signUpUrl: KIMI_CHINESE_AFFILIATE_URL, siteKey: 'auth_login.sponsor_site_china' },
   },
   {
     kind: 'builtin',
@@ -74,10 +71,6 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
     icon: { light: iconKimiTileBlack, dark: iconKimiTileWhite },
     flow: 'device',
     domain: 'kimi.ai',
-    sponsor: {
-      signUpUrl: KIMI_INTERNATIONAL_AFFILIATE_URL,
-      siteKey: 'auth_login.sponsor_site_international',
-    },
   },
   {
     kind: 'builtin',
@@ -121,6 +114,22 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
   },
   {
     kind: 'builtin',
+    id: 'cursor' as any,
+    label: 'Cursor',
+    titleKey: 'auth_login.cursor_oauth_title',
+    icon: iconCursor,
+    flow: 'browser',
+  },
+  {
+    kind: 'builtin',
+    id: 'cline' as any,
+    label: 'Cline',
+    titleKey: 'auth_login.cline_oauth_title',
+    icon: iconCline,
+    flow: 'device',
+  },
+  {
+    kind: 'builtin',
     id: 'devin',
     label: 'Devin',
     titleKey: 'auth_login.devin_oauth_title',
@@ -138,6 +147,7 @@ export const CALLBACK_SUPPORTED = new Set<string>([
   'antigravity',
   'xai',
   'devin',
+  'cursor',
 ]);
 
 export const supportsManualCallback = (provider: OAuthProviderCard): boolean =>

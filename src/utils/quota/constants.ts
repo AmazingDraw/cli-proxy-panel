@@ -54,6 +54,14 @@ export const TYPE_COLORS: Record<string, TypeColorSet> = {
     light: { bg: '#e4edfd', text: '#2b5fbc' },
     dark: { bg: '#1a3d80', text: '#89b3f7' },
   },
+  cursor: {
+    light: { bg: '#f0eee8', text: '#2d2a26', border: '1px solid #d5d2cb' },
+    dark: { bg: '#262320', text: '#f6f4f1', border: '1px solid #3a3530' },
+  },
+  cline: {
+    light: { bg: '#eef2ff', text: '#3730a3', border: '1px solid #c7d2fe' },
+    dark: { bg: '#1e1b4b', text: '#c7d2fe', border: '1px solid #4338ca' },
+  },
   empty: {
     light: { bg: '#f5f5f5', text: '#616161' },
     dark: { bg: '#424242', text: '#bdbdbd' },
@@ -168,4 +176,23 @@ export const XAI_REQUEST_HEADERS = {
 export const XAI_API_REQUEST_HEADERS = {
   Authorization: 'Bearer $TOKEN$',
   accept: 'application/json',
+};
+
+// Cursor API configuration (Dashboard Connect RPC on api2.cursor.sh)
+export const CURSOR_PERIOD_USAGE_URL =
+  'https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage';
+export const CURSOR_PLAN_INFO_URL =
+  'https://api2.cursor.sh/aiserver.v1.DashboardService/GetPlanInfo';
+export const CURSOR_HARD_LIMIT_URL =
+  'https://api2.cursor.sh/aiserver.v1.DashboardService/GetHardLimit';
+export const CURSOR_SAND_USAGE_URL =
+  'https://api2.cursor.sh/aiserver.v1.DashboardService/GetSandUsageStatus';
+export const CURSOR_USAGE_SUMMARY_URL = 'https://api2.cursor.sh/api/usage/summary';
+export const CURSOR_AUTH_USAGE_URL = 'https://api2.cursor.sh/auth/usage';
+
+export const CURSOR_REQUEST_HEADERS = {
+  Authorization: 'Bearer $TOKEN$',
+  'Content-Type': 'application/json',
+  'Connect-Protocol-Version': '1',
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
 };

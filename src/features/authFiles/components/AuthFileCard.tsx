@@ -29,7 +29,11 @@ import {
   type AuthFileQuotaFilter,
   type ResolvedTheme,
 } from '@/features/authFiles/constants';
-import { deriveAuthFileIdentity } from '@/features/authFiles/identity';
+import {
+  deriveAuthFileIdentity,
+  isKeyCredentialFile,
+  isOAuthCredentialFile,
+} from '@/features/authFiles/identity';
 import { resolveAuthFileQuotaType } from '@/features/authFiles/logic';
 import type { AuthFileStatusBarData } from '@/features/authFiles/hooks/useAuthFilesStatusBarCache';
 import { AuthFileQuotaSection } from '@/features/authFiles/components/AuthFileQuotaSection';
@@ -110,7 +114,17 @@ export function AuthFileCard(props: AuthFileCardProps) {
   const rawStatusMessage = getAuthFileStatusMessage(file);
   const hasStatusWarning = hasAuthFileStatusWarning(file);
 
-  const priorityValue = Number.isSafeInteger(file.priority) ? file.priority : undefined;
+  const isKey = isKeyCredentialFile(file);
+  const isOAuth = isOAuthCredentialFile(file);
+
+  let priorityValue = Number.isSafeInteger(file.priority) ? file.priority : undefined;
+  if (providerKey === 'cline' && (priorityValue === undefined || priorityValue === 0)) {
+    if (isKey) {
+      priorityValue = 0;
+    } else if (isOAuth) {
+      priorityValue = 1;
+    }
+  }
   const weightValue = Number.isSafeInteger(file.weight) ? file.weight : undefined;
   const noteValue = typeof file.note === 'string' ? file.note.trim() : '';
   // Lead with account identity and use the file name as secondary text.
@@ -172,7 +186,13 @@ export function AuthFileCard(props: AuthFileCardProps) {
 
       {identity.secondary && (
         <p className={styles.fileName} title={identity.fullName}>
-          {identity.secondary}
+          {isKey && (
+            <span className={`${styles.fileBadge} ${styles.fileBadgeKey}`}>API Key</span>
+          )}
+          {isOAuth && (
+            <span className={`${styles.fileBadge} ${styles.fileBadgeOAuth}`}>OAuth</span>
+          )}
+          <span>{identity.secondary}</span>
         </p>
       )}
 

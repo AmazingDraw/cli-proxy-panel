@@ -107,7 +107,8 @@
     "plugin_store": "插件商店",
     "config_management": "配置面板",
     "logs": "日志查看",
-    "system_info": "中心信息"
+    "system_info": "中心信息",
+    "usage_statistics": "使用统计"
   },
   "nav_groups": {
     "operate": "运行",
@@ -127,7 +128,8 @@
     "plugin_store": "发现并安装插件",
     "logs": "请求追踪与排查",
     "config_management": "网关基础配置",
-    "system_info": "运行与诊断信息"
+    "system_info": "运行与诊断信息",
+    "usage_statistics": "按模型和渠道查看详细使用统计"
   },
   "dashboard": {
     "hero_verdict_good": "运行平稳",
@@ -433,7 +435,9 @@
     "quota_refresh_single": "刷新额度",
     "quota_refresh_hint": "仅刷新该认证文件的额度",
     "quota_refresh_success": "已刷新 \"{{name}}\" 的额度",
-    "quota_refresh_failed": "刷新 \"{{name}}\" 的额度失败：{{message}}"
+    "quota_refresh_failed": "刷新 \"{{name}}\" 的额度失败：{{message}}",
+    "filter_cline": "Cline",
+    "filter_cursor": "Cursor"
   },
   "antigravity_subscription": {
     "plan_unknown": "未知",
@@ -549,7 +553,6 @@
     "reset_confirm_button": "确认重置",
     "reset_not_confirmed": "未确认额度重置成功，请刷新额度后再决定是否重试。",
     "reset_cooldown_failed": "额度已重置，但代理冷却清除失败。请在原连接的认证文件页面使用“清除冷却”，不要再次消耗重置卡。",
-
     "reset_success": "已重置 \"{{name}}\" 的 Codex 额度",
     "reset_failed": "重置 \"{{name}}\" 的 Codex 额度失败：{{message}}",
     "plan_plus": "Plus",
@@ -967,7 +970,19 @@
     "restart_login": "重新开始",
     "success_saved_hint": "凭证已保存，可在认证文件页管理。",
     "sign_up_prompt": "还没有账号？",
-    "copied": "已复制"
+    "copied": "已复制",
+    "cursor_oauth_title": "Cursor OAuth",
+    "cursor_oauth_button": "开始 Cursor 登录",
+    "cursor_oauth_hint": "通过 PKCE 流程登录 Cursor 账号，自动获取并保存认证文件与可用模型。",
+    "cursor_open_link": "打开链接",
+    "cursor_copy_link": "复制链接",
+    "cursor_oauth_status_waiting": "等待认证中...",
+    "cursor_oauth_status_success": "认证成功！",
+    "cursor_oauth_status_error": "认证失败:",
+    "cursor_oauth_start_error": "启动 Cursor OAuth 失败:",
+    "cursor_oauth_polling_error": "检查认证状态失败:",
+    "cline_oauth_title": "Cline OAuth",
+    "cline_oauth_button": "开始 Cline 登录"
   },
   "stats": {
     "success": "成功",
@@ -2309,5 +2324,54 @@
     "error": "绑定失败，请重新开始。",
     "unsupported": "当前后端不支持 SIWC 绑定。",
     "expired": "绑定会话已过期，请重新开始。"
+  },
+  "cursor_quota": {
+    "title": "Cursor 额度",
+    "empty_title": "暂无 Cursor 认证",
+    "empty_desc": "使用 Cursor OAuth 登录后即可查看配额与使用情况。",
+    "idle": "点击此处刷新额度",
+    "loading": "正在加载额度...",
+    "load_failed": "额度获取失败：{{message}}",
+    "missing_auth_index": "认证文件缺少 auth_index",
+    "empty_data": "暂无额度数据",
+    "refresh_button": "刷新额度",
+    "fetch_all": "获取全部",
+    "total_limit": "30 天限额",
+    "first_party_models": "官方模型",
+    "api_usage": "API 用量",
+    "grok_bot": "Grok Bot",
+    "plan_label": "套餐",
+    "plan_pro": "Pro",
+    "plan_pro_plus": "Pro+",
+    "plan_ultra": "Ultra",
+    "plan_business": "Business",
+    "plan_free": "免费版",
+    "included_spend_label": "已含用量",
+    "included_spend": "{{used}} / {{limit}}",
+    "bonus_spend_label": "奖励用量",
+    "on_demand_off": "按量计费已关",
+    "used_percent": "已用 {{percent}}",
+    "reset_at": "重置 {{time}}"
+  },
+  "cline_quota": {
+    "title": "Cline 额度",
+    "empty_title": "暂无 Cline 凭证",
+    "empty_desc": "登录 Cline 后可在此查看 Pass 套餐与额度窗口。",
+    "idle": "点击卡片加载额度",
+    "loading": "正在加载 Cline 额度…",
+    "load_failed": "加载失败：{{message}}",
+    "missing_auth_index": "缺少 auth_index，无法拉取额度",
+    "empty_data": "未返回可用的 Cline 额度数据",
+    "refresh_button": "刷新",
+    "fetch_all": "刷新全部",
+    "plan_label": "套餐",
+    "status_label": "状态",
+    "window_period": "账期",
+    "window_5h": "5 小时额度",
+    "window_7d": "7 天额度",
+    "used_percent": "已用 {{percent}}",
+    "reset_at": "重置",
+    "window_monthly": "月额度",
+    "window_weekly": "周额度"
   }
 }

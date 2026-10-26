@@ -8,10 +8,10 @@ import { OAuthPage } from '@/features/oauth/OAuthPage';
 import { QuotaPage } from '@/features/quota/QuotaPage';
 import { PluginResourcePage } from '@/features/plugins/PluginResourcePage';
 import { PluginsPage } from '@/features/plugins/PluginsPage';
-import { PluginStorePage } from '@/features/plugins/PluginStorePage';
 import { ConfigPage } from '@/features/config/ConfigPage';
 import { LogsPage } from '@/features/logs/LogsPage';
 import { SystemPage } from '@/pages/SystemPage';
+import { UsageStatisticsPage } from '@/pages/UsageStatisticsPage';
 import { useAuthStore } from '@/stores';
 
 const createMainRoutes = (supportsPlugin: boolean) => [
@@ -19,8 +19,8 @@ const createMainRoutes = (supportsPlugin: boolean) => [
   { path: '/dashboard', element: <DashboardPage /> },
   { path: '/settings', element: <Navigate to="/config" replace /> },
   { path: '/api-keys', element: <Navigate to="/config" replace /> },
-  { path: '/quick-start', element: <ProvidersWorkbenchPage fixedBrand="apikeyFun" /> },
-  { path: '/quick-start/*', element: <Navigate to="/quick-start" replace /> },
+  { path: '/quick-start', element: <Navigate to="/ai-providers" replace /> },
+  { path: '/quick-start/*', element: <Navigate to="/ai-providers" replace /> },
   { path: '/ai-providers', element: <ProvidersWorkbenchPage /> },
   { path: '/ai-providers/*', element: <Navigate to="/ai-providers" replace /> },
   { path: '/auth-files', element: <AuthFilesPage /> },
@@ -32,7 +32,7 @@ const createMainRoutes = (supportsPlugin: boolean) => [
     ? [
         { path: '/plugin-pages/:pluginId/:menuIndex', element: <PluginResourcePage /> },
         { path: '/plugins', element: <PluginsPage /> },
-        { path: '/plugin-store', element: <PluginStorePage /> },
+        { path: '/plugin-store', element: <Navigate to="/plugins" replace /> },
         { path: '/plugins/*', element: <Navigate to="/plugins" replace /> },
       ]
     : [
@@ -43,6 +43,7 @@ const createMainRoutes = (supportsPlugin: boolean) => [
   { path: '/config', element: <ConfigPage /> },
   { path: '/logs', element: <LogsPage /> },
   { path: '/system', element: <SystemPage /> },
+  { path: '/usage-statistics', element: <UsageStatisticsPage /> },
   { path: '*', element: <Navigate to="/" replace /> },
 ];
 

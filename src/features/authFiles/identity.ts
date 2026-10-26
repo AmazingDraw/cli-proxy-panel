@@ -41,6 +41,27 @@ export const stripJsonExtension = (name: string): string => {
   return trimmed.toLowerCase().endsWith('.json') ? trimmed.slice(0, -5) : trimmed;
 };
 
+/** 判断是否为显式 Key 凭证（文件名含 -key- 或以 key- 开头等）。 */
+export const isKeyCredentialFile = (file: AuthFileItem): boolean => {
+  const fullName = readIdentityText(file.name).toLowerCase();
+  const base = stripJsonExtension(fullName);
+  return (
+    base.includes('-key-') ||
+    base.endsWith('-key') ||
+    base.startsWith('key-') ||
+    readIdentityText(file.label).startsWith('API Key ····') ||
+    readIdentityText(file.email).startsWith('API Key ····')
+  );
+};
+
+/** 判断是否为 OAuth 凭证。 */
+export const isOAuthCredentialFile = (file: AuthFileItem): boolean => {
+  if (isKeyCredentialFile(file)) return false;
+  const fullName = readIdentityText(file.name).toLowerCase();
+  const email = readIdentityText(file.email);
+  return fullName.includes('@') || fullName.includes('oauth') || Boolean(email);
+};
+
 /**
  * 身份回落链：email → projectId → 文件名（去 .json）。
  * 刻意与 provider 无关：runtime-only 虚拟凭证（name === email === 频道 ID）

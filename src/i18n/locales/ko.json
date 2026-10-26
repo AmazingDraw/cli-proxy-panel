@@ -107,7 +107,8 @@
     "plugin_store": "플러그인 스토어",
     "config_management": "설정 패널",
     "logs": "로그 뷰어",
-    "system_info": "관리 센터 정보"
+    "system_info": "관리 센터 정보",
+    "usage_statistics": "Usage Statistics"
   },
   "nav_groups": {
     "operate": "운영",
@@ -127,7 +128,8 @@
     "plugin_store": "플러그인 탐색 및 설치",
     "logs": "요청 추적",
     "config_management": "게이트웨이 설정",
-    "system_info": "런타임 및 진단"
+    "system_info": "런타임 및 진단",
+    "usage_statistics": "Detailed token and request usage by model and provider"
   },
   "dashboard": {
     "hero_verdict_good": "모든 시스템 정상",
@@ -435,7 +437,9 @@
     "quota_refresh_single": "할당량 새로 고침",
     "quota_refresh_hint": "이 자격 증명의 할당량만 새로 고침합니다",
     "quota_refresh_success": "\"{{name}}\"의 할당량을 새로 고쳤습니다",
-    "quota_refresh_failed": "\"{{name}}\"의 할당량 새로 고침 실패: {{message}}"
+    "quota_refresh_failed": "\"{{name}}\"의 할당량 새로 고침 실패: {{message}}",
+    "filter_cline": "Cline",
+    "filter_cursor": "Cursor"
   },
   "antigravity_subscription": {
     "plan_unknown": "알 수 없음",
@@ -968,7 +972,19 @@
     "restart_login": "다시 시작",
     "success_saved_hint": "자격 증명이 저장되었습니다. 인증 파일에서 관리할 수 있습니다.",
     "sign_up_prompt": "계정이 없나요?",
-    "copied": "복사됨"
+    "copied": "복사됨",
+    "cursor_oauth_title": "Cursor OAuth",
+    "cursor_oauth_button": "Start Cursor Login",
+    "cursor_oauth_hint": "Login to Cursor through PKCE flow, automatically obtain and save authentication files and usable models.",
+    "cursor_open_link": "Open Link",
+    "cursor_copy_link": "Copy Link",
+    "cursor_oauth_status_waiting": "Waiting for authentication...",
+    "cursor_oauth_status_success": "Authentication successful!",
+    "cursor_oauth_status_error": "Authentication failed:",
+    "cursor_oauth_start_error": "Failed to start Cursor OAuth:",
+    "cursor_oauth_polling_error": "Failed to check authentication status:",
+    "cline_oauth_title": "Cline OAuth",
+    "cline_oauth_button": "Start Cline Login"
   },
   "stats": {
     "success": "성공",
@@ -2310,5 +2326,54 @@
     "error": "바인딩에 실패했습니다. 다시 시작하세요.",
     "unsupported": "이 서버는 SIWC 바인딩을 지원하지 않습니다.",
     "expired": "바인딩 세션이 만료되었습니다. 다시 시작하세요."
+  },
+  "cursor_quota": {
+    "title": "Cursor Quota",
+    "empty_title": "No Cursor Authentication",
+    "empty_desc": "Log in via Cursor OAuth to view your quota and usage.",
+    "idle": "Click to refresh quota",
+    "loading": "Loading quota...",
+    "load_failed": "Failed to load quota: {{message}}",
+    "missing_auth_index": "Missing auth_index in auth file",
+    "empty_data": "No quota data available",
+    "refresh_button": "Refresh Quota",
+    "fetch_all": "Fetch All",
+    "total_limit": "30-Day Limit",
+    "first_party_models": "Official Models",
+    "api_usage": "API Usage",
+    "grok_bot": "Grok Bot",
+    "plan_label": "Plan",
+    "plan_pro": "Pro",
+    "plan_pro_plus": "Pro+",
+    "plan_ultra": "Ultra",
+    "plan_business": "Business",
+    "plan_free": "Free",
+    "included_spend_label": "Included",
+    "included_spend": "{{used}} / {{limit}}",
+    "bonus_spend_label": "Bonus",
+    "on_demand_off": "On-demand spend off",
+    "used_percent": "Used {{percent}}",
+    "reset_at": "Resets {{time}}"
+  },
+  "cline_quota": {
+    "title": "Cline Quota",
+    "empty_title": "No Cline credentials",
+    "empty_desc": "Sign in to Cline to view Pass plan and quota windows here.",
+    "idle": "Click a card to load quota",
+    "loading": "Loading Cline quota…",
+    "load_failed": "Failed to load: {{message}}",
+    "missing_auth_index": "Missing auth_index; cannot fetch quota",
+    "empty_data": "No usable Cline quota data returned",
+    "refresh_button": "Refresh",
+    "fetch_all": "Refresh all",
+    "plan_label": "Plan",
+    "status_label": "Status",
+    "window_period": "Billing period",
+    "window_5h": "5-Hour Limit",
+    "window_7d": "7-day cap",
+    "used_percent": "Used {{percent}}",
+    "reset_at": "Reset",
+    "window_monthly": "Monthly Limit",
+    "window_weekly": "Weekly Limit"
   }
 }

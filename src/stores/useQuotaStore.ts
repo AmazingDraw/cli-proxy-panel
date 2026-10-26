@@ -7,7 +7,9 @@ import { getQuotaCacheFileName } from '@/utils/quota/identity';
 import type {
   AntigravityQuotaState,
   ClaudeQuotaState,
+  ClineQuotaState,
   CodexQuotaState,
+  CursorQuotaState,
   DevinQuotaState,
   KimiQuotaState,
   MetaQuotaState,
@@ -24,6 +26,8 @@ interface QuotaStoreState {
   claudeQuota: Record<string, ClaudeQuotaState>;
   codexQuota: Record<string, CodexQuotaState>;
   devinQuota: Record<string, DevinQuotaState>;
+  cursorQuota: Record<string, CursorQuotaState>;
+  clineQuota: Record<string, ClineQuotaState>;
   kimiQuota: Record<string, KimiQuotaState>;
   metaQuota: Record<string, MetaQuotaState>;
   pluginQuota: Record<string, PluginQuotaState>;
@@ -32,6 +36,8 @@ interface QuotaStoreState {
   setClaudeQuota: (updater: QuotaUpdater<Record<string, ClaudeQuotaState>>) => void;
   setCodexQuota: (updater: QuotaUpdater<Record<string, CodexQuotaState>>) => void;
   setDevinQuota: (updater: QuotaUpdater<Record<string, DevinQuotaState>>) => void;
+  setCursorQuota: (updater: QuotaUpdater<Record<string, CursorQuotaState>>) => void;
+  setClineQuota: (updater: QuotaUpdater<Record<string, ClineQuotaState>>) => void;
   setKimiQuota: (updater: QuotaUpdater<Record<string, KimiQuotaState>>) => void;
   setMetaQuota: (updater: QuotaUpdater<Record<string, MetaQuotaState>>) => void;
   setPluginQuota: (updater: QuotaUpdater<Record<string, PluginQuotaState>>) => void;
@@ -53,6 +59,8 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
   claudeQuota: {},
   codexQuota: {},
   devinQuota: {},
+  cursorQuota: {},
+  clineQuota: {},
   kimiQuota: {},
   metaQuota: {},
   pluginQuota: {},
@@ -99,6 +107,14 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
     set((state) => ({
       devinQuota: resolveUpdater(updater, state.devinQuota),
     })),
+  setCursorQuota: (updater) =>
+    set((state) => ({
+      cursorQuota: resolveUpdater(updater, state.cursorQuota),
+    })),
+  setClineQuota: (updater) =>
+    set((state) => ({
+      clineQuota: resolveUpdater(updater, state.clineQuota),
+    })),
   setKimiQuota: (updater) =>
     set((state) => ({
       kimiQuota: resolveUpdater(updater, state.kimiQuota),
@@ -137,6 +153,8 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
           claudeQuota: omitNames(state.claudeQuota),
           codexQuota: omitNames(state.codexQuota),
           devinQuota: omitNames(state.devinQuota),
+          cursorQuota: omitNames(state.cursorQuota),
+          clineQuota: omitNames(state.clineQuota),
           kimiQuota: omitNames(state.kimiQuota),
           metaQuota: omitNames(state.metaQuota),
           pluginQuota: omitNames(state.pluginQuota),
@@ -150,6 +168,8 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
         claudeQuota: {},
         codexQuota: {},
         devinQuota: {},
+        cursorQuota: {},
+        clineQuota: {},
         kimiQuota: {},
         metaQuota: {},
         pluginQuota: {},

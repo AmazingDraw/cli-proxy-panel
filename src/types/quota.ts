@@ -521,3 +521,58 @@ export interface XaiQuotaState {
   error?: string;
   errorStatus?: number;
 }
+
+export interface CursorQuotaWindow {
+  id: string;
+  label: string;
+  labelKey?: string;
+  usedPercent: number | null;
+  resetLabel: string;
+  /** Reset instant in epoch ms; null when the payload carried no timestamp. */
+  resetAtMs?: number | null;
+  /** Window length in hours (default 720h / 30d). */
+  periodHours?: number | null;
+}
+
+export interface CursorQuotaData {
+  windows: CursorQuotaWindow[];
+  planName?: string | null;
+  planPrice?: string | null;
+  onDemandAllowed?: boolean | null;
+  includedSpendCents?: number | null;
+  limitCents?: number | null;
+  bonusSpendCents?: number | null;
+}
+
+export interface CursorQuotaState {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  data: CursorQuotaData | null;
+  error?: string;
+  errorStatus?: number;
+}
+
+export interface ClineQuotaWindow {
+  id: string;
+  label: string;
+  labelKey?: string;
+  /** Used percent 0-100; null when unknown. */
+  usedPercent: number | null;
+  resetLabel: string;
+  resetAtMs: number | null;
+  periodHours?: number | null;
+  description?: string;
+}
+
+export interface ClineQuotaData {
+  windows: ClineQuotaWindow[];
+  planName?: string | null;
+  planPrice?: string | null;
+  status?: string | null;
+}
+
+export interface ClineQuotaState {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  data: ClineQuotaData | null;
+  error?: string;
+  errorStatus?: number;
+}

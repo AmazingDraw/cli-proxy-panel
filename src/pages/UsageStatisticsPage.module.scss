@@ -1,0 +1,807 @@
+@use 'sass:color';
+@use '../styles/variables.scss' as *;
+
+.container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+  position: relative;
+  padding-top: 16px;
+}
+
+// Decorative background blobs
+.backgroundOrbs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.35;
+  filter: blur(20px);
+}
+
+.orb1 {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--primary-color) 6%, transparent),
+    transparent 70%
+  );
+  top: -100px;
+  right: -50px;
+}
+
+.orb2 {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--success-color) 4%, transparent),
+    transparent 70%
+  );
+  bottom: 20%;
+  left: -80px;
+}
+
+// Header
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  gap: $spacing-md;
+  margin-top: 12px;
+  margin-bottom: 8px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.pageTitle {
+  margin: 0 0 4px;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+// Error box
+.errorBox {
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  background: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.2);
+  color: $error-color;
+  font-size: 14px;
+}
+
+// Bento Grid
+.bentoGrid,
+.performanceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bentoCard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding: $spacing-md;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-primary) 86%, transparent),
+    color-mix(in srgb, var(--bg-secondary) 72%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--border-color) 66%, transparent);
+  border-radius: $radius-lg;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.05);
+}
+
+.bentoIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-md;
+  background: color-mix(in srgb, var(--primary-color) 8%, var(--bg-secondary));
+  color: var(--primary-color);
+}
+
+.bentoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bentoValue {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.bentoLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.bentoSublabel {
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+// Chart section
+.chartCard {
+  padding: $spacing-xl;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-primary) 86%, transparent),
+    color-mix(in srgb, var(--bg-secondary) 72%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--border-color) 66%, transparent);
+  border-radius: $radius-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.cardHeading {
+  margin: 0 0 $spacing-lg;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.chartList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.chartRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modelNameInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rankBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: $radius-sm;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.modelName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: $font-mono;
+}
+
+.barContainer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  height: 24px;
+  background: var(--bg-secondary);
+  border-radius: $radius-sm;
+  overflow: hidden;
+  position: relative;
+}
+
+.barFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), color-mix(in srgb, var(--primary-color) 60%, transparent));
+  border-radius: $radius-sm;
+  transition: width 0.4s ease-out;
+}
+
+.barValue {
+  position: absolute;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+// Table Card
+.tableCard {
+  padding: $spacing-xl;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-primary) 86%, transparent),
+    color-mix(in srgb, var(--bg-secondary) 72%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--border-color) 66%, transparent);
+  border-radius: $radius-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  gap: $spacing-md;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.filterControls {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    
+    .filterSelect {
+      flex: 1;
+      min-width: 100px;
+    }
+  }
+}
+
+.filterSelect {
+  width: 150px;
+  max-width: 100%;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  min-height: 200px;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+
+  th, td {
+    padding: $spacing-md;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--bg-secondary) 50%, transparent);
+  }
+
+  tr:hover td {
+    background: color-mix(in srgb, var(--bg-secondary) 20%, transparent);
+  }
+}
+
+.timeCell {
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.modelDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.providerBadge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border-radius: $radius-sm;
+  background: var(--bg-secondary);
+  color: var(--primary-color);
+  align-self: flex-start;
+}
+
+.modelText {
+  font-family: $font-mono;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: $radius-full;
+  font-size: 11px;
+  font-weight: 600;
+
+  &.success {
+    background: rgba($success-color, 0.12);
+    color: $success-color;
+    border: 1px solid rgba($success-color, 0.2);
+  }
+
+  &.failed {
+    background: rgba($error-color, 0.12);
+    color: $error-color;
+    border: 1px solid rgba($error-color, 0.2);
+  }
+}
+
+.tokensDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.totalTokensText {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.tokensBreakdown {
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.latencyDetails {
+  display: flex;
+  flex-direction: column;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.ttftText {
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.keyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.keyText {
+  font-family: $font-mono;
+  color: var(--text-secondary);
+}
+
+.sourceText {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  word-break: break-all;
+}
+
+.deleteButton {
+  padding: 6px !important;
+  color: var(--text-secondary) !important;
+  border-color: transparent !important;
+
+  &:hover {
+    color: $error-color !important;
+    background: rgba($error-color, 0.08) !important;
+    border-color: transparent !important;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-lg;
+  padding-top: $spacing-md;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+}
+
+.pageInfo {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.paginationButton {
+  > span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    line-height: 1 !important;
+  }
+}
+
+.loadingPlaceholder, .emptyPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.maskedKeyWrapper {
+  display: inline-flex;
+  align-items: center;
+  font-family: $font-mono;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  
+  &:hover .keyPartBlurred {
+    filter: none !important;
+    -webkit-filter: none !important;
+    opacity: 1;
+  }
+}
+
+.keyPart {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.keyPartBlurred {
+  display: inline-block;
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+  opacity: 0.65;
+  transition: filter 0.2s ease, -webkit-filter 0.2s ease, opacity 0.2s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Heatmap Activity Grid Card
+.heatmapCard {
+  padding: $spacing-xl;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-primary) 86%, transparent),
+    color-mix(in srgb, var(--bg-secondary) 72%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--border-color) 66%, transparent);
+  border-radius: $radius-lg;
+  position: relative;
+  z-index: 1;
+}
+
+.heatmapHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  .cardHeading {
+    margin: 0;
+  }
+}
+
+.periodSelect {
+  width: 120px;
+}
+
+.heatmapWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.monthHeaderRow {
+  display: flex;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.dayLabelSpacer {
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.chartContainer {
+  position: relative;
+  width: 100%;
+  margin-top: $spacing-md;
+  overflow: visible;
+}
+
+.trendSvg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.chartTooltip {
+  position: absolute;
+  padding: 10px 14px;
+  background: color-mix(in srgb, var(--bg-primary) 92%, var(--bg-secondary));
+  border: 1px solid color-mix(in srgb, var(--border-color) 66%, transparent);
+  border-radius: $radius-md;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  min-width: 160px;
+  transition: left 0.08s ease, top 0.08s ease;
+
+  @media (max-width: 600px) {
+    font-size: 11px;
+    padding: 8px 12px;
+    min-width: 140px;
+  }
+}
+
+.tooltipDate {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.tooltipValue {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-family: $font-mono;
+}
+
+.tooltipCount {
+  color: var(--text-secondary);
+  font-family: $font-mono;
+}
+
+.heatmapFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-lg;
+  font-size: 11px;
+  color: var(--text-secondary);
+  opacity: 0.85;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.footerNote {
+  font-style: italic;
+}
+
+/* Side-by-Side Flex Layout */
+.chartFlexLayout {
+  display: flex;
+  gap: $spacing-lg;
+  width: 100%;
+  margin-top: $spacing-md;
+
+  @media (max-width: 960px) {
+    flex-direction: column;
+  }
+}
+
+.trendCard {
+  flex: 1.5;
+  min-width: 0;
+}
+
+.donutCard {
+  flex: 1.5;
+  min-width: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.donutContentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-lg;
+  flex: 1;
+  margin-top: $spacing-md;
+
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: $spacing-md;
+  }
+}
+
+.donutSvgWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 240px;
+  height: 240px;
+}
+
+.donutSvg {
+  display: block;
+  overflow: visible;
+}
+
+.pieSlicePath {
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+}
+
+.donutCenterValue {
+  font-size: 26px;
+  font-weight: 700;
+  fill: var(--text-primary);
+  font-family: $font-mono;
+}
+
+.donutCenterLabel {
+  font-size: 11px;
+  fill: var(--text-secondary);
+  opacity: 0.85;
+  font-weight: 500;
+  transition: fill 0.2s ease;
+}
+
+.cardHeaderWithSub {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pieSubHeading {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+  transition: color 0.2s ease;
+  font-family: $font-mono;
+
+  strong {
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+}
+
+.donutLegendList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  width: 100%;
+  max-width: 220px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: $radius-sm;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-color) 15%, transparent);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: color-mix(in srgb, var(--border-color) 35%, transparent);
+  }
+}
+
+.legendItemActive {
+  background: color-mix(in srgb, var(--primary-color) 8%, transparent) !important;
+  box-shadow: inset 2px 0 0 var(--primary-color);
+  
+  .legendName {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .legendPercent {
+    color: var(--primary-color);
+  }
+  
+  .legendColor {
+    transform: scale(1.25);
+  }
+}
+
+.legendColor {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.legendName {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  margin-right: 8px;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.legendPercent {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-family: $font-mono;
+  flex-shrink: 0;
+  min-width: 52px;
+  text-align: right;
+}
+
+.donutEmptyPlaceholder {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+}
