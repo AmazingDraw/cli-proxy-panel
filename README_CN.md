@@ -89,6 +89,32 @@ remote-management:
 
 ---
 
+## 🔍 验证规范与运维准则（双端 3 秒延时重启 + Kimi 真实浏览器核验）
+
+为确保生产环境部署 100% 稳定无异常，后续任何前端或后端更新必须严格执行以下两条规范：
+
+1. **优雅延时重启（无论前端还是后端，强制加入 3 秒延时等待）**：
+   - **Mac 本机节点**：
+     ```bash
+     launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3
+     ```
+   - **NAS 容器节点**：
+     ```bash
+     docker restart cliproxy && sleep 3
+     ```
+   杜绝端口并发碰撞与无延时导致的假死断流。
+
+2. **Kimi WebBridge 真实浏览器审查（硬性验收步骤）**：
+   - 每次重构打包发布后，**必须通过 `kimi-webbridge` 驱动真实浏览器进行最终验收**，坚决杜绝未经验收盲目交付：
+     1. 检查守护状态：`~/.kimi-webbridge/bin/kimi-webbridge status`
+     2. 导航并真机实测核心页面：
+        - `#/usage-statistics`：核对 Token 趋势、耗时大盘与 SQLite 请求流水；
+        - `#/ai-providers`：核对纯净提供商列表（彻底排除 FennoAI、七牛云等商业推广项）；
+        - `#/quota`：核对 Cursor / Cline 等独立 Tab 额度窗口与重置倒计时。
+     3. 捕获真实渲染截图进行审查自证。
+
+---
+
 ## 🛠️ 技术栈
 
 - **前端框架**：React 19 + TypeScript 6.0

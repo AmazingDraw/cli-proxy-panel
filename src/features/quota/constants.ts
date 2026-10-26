@@ -4,12 +4,11 @@ import type { QuotaProviderType } from './providers/types';
 export const QUOTA_TAB_ORDER: readonly QuotaProviderType[] = [
   'claude',
   'antigravity',
-  'codex',
+  'cursor',
+  'cline',
   'xai',
   'kimi',
   'devin',
-  'meta',
-  'plugin',
 ];
 
 export type QuotaTabId = 'all' | QuotaProviderType;

@@ -157,10 +157,20 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
     () =>
       fixedBrand
         ? allGroups.filter((group) => group.id === fixedBrand)
-        : allGroups.filter((group) => group.id !== 'apikeyFun'),
+        : allGroups.filter(
+            (group) =>
+              group.id !== 'apikeyFun' &&
+              group.id !== 'fennoAI' &&
+              group.id !== 'qiniuCloud' &&
+              group.id !== 'vertex' &&
+              group.id !== 'interactions' &&
+              group.id !== 'kimi' &&
+              group.id !== 'codex' &&
+              group.id !== 'meta'
+          ),
     [allGroups, fixedBrand]
   );
-  const firstVisibleBrand = groups[0]?.id ?? fixedBrand ?? 'gemini';
+  const firstVisibleBrand = groups[0]?.id ?? fixedBrand ?? 'openaiCompatibility';
   const activeBrand =
     fixedBrand ??
     (groups.some((group) => group.id === uiState.activeBrand)

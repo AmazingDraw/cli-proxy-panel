@@ -88,6 +88,19 @@ remote-management:
 
 ---
 
+## 🔍 Verification & Operations Guidelines (3s Delayed Restart & Kimi Browser Inspection)
+
+1. **Graceful Delayed Restart (Mandatory 3s delay for both frontend and backend)**:
+   - **Mac Local Node**: `launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3`
+   - **NAS Docker Node**: `docker restart cliproxy && sleep 3`
+2. **Kimi WebBridge Browser Verification (Mandatory Acceptance Step)**:
+   - Always verify via `kimi-webbridge` driving real Edge browser to validate live rendering before final sign-off:
+     - `#/usage-statistics`: Validate Token trends, latency metrics, and SQLite log stream (confirming zero 404s).
+     - `#/ai-providers`: Confirm stripped commercial promos (FennoAI, Qiniu Cloud).
+     - `#/quota`: Verify Cursor and Cline dedicated tabs, brand logos, and multi-window quota meters.
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Framework**: React 19 + TypeScript 6.0

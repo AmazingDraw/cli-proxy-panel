@@ -119,10 +119,27 @@ if [[ ! -f "dist/index.html" ]]; then
   exit 1
 fi
 
-# 4. 部署到后端静态托管目录
+# 4. 部署到后端静态托管目录并优雅延时重启服务
 echo "==> 部署构建产物到 ${TARGET_HTML}..."
 mkdir -p "$(dirname "${TARGET_HTML}")"
 cp dist/index.html "${TARGET_HTML}"
+
+echo "==> 执行后端服务优雅延时重启（加入 3 秒延时等待）..."
+if [[ "$(uname)" == "Darwin" ]]; then
+  launchctl kickstart -k "gui/$(id -u)/com.cli-proxy-api" && sleep 3
+fi
+
+# 5. Kimi WebBridge 自动化真机界面验收规范（硬性步骤）
+echo "============================================================"
+echo "💡 Kimi 真实浏览器核验规范（硬性验收标准）："
+echo "   1. 运行 status 检查 Kimi WebBridge daemon 存活："
+echo "      ~/.kimi-webbridge/bin/kimi-webbridge status"
+echo "   2. 调用 navigate 导航到各业务页面进行无障碍快照与渲染复核："
+echo "      - 使用统计：http://127.0.0.1:8317/management.html#/usage-statistics"
+echo "      - AI 提供商：http://127.0.0.1:8317/management.html#/ai-providers"
+echo "      - 配额管理：http://127.0.0.1:8317/management.html#/quota"
+echo "   3. 调用 screenshot 捕获实际显示结果，确认图表、卡片无 404 / 闪白 / 样式崩坏。"
+echo "============================================================"
 
 echo "[+] 纯净管理面板（含去广告 + Cursor / Cline 增强定制）重建部署完成！"
 echo "    面板访问地址: http://127.0.0.1:8317/management.html"

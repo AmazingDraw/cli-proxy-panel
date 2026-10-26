@@ -288,15 +288,15 @@ export const getProviderModelCapabilities = (brand: ProviderBrand): ProviderMode
 });
 
 export const PROVIDER_BRAND_ORDER: ProviderBrand[] = [
-  'kimi',
+  'openaiCompatibility',
   'gemini',
-  'interactions',
+  'claude',
+  'xai',
   'codex',
   'meta',
-  'xai',
-  'claude',
+  'interactions',
   'vertex',
-  'openaiCompatibility',
+  'kimi',
   'apikeyFun',
   'fennoAI',
   'qiniuCloud',

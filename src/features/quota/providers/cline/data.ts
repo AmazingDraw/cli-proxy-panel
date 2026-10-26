@@ -6,6 +6,8 @@
 import type { TFunction } from 'i18next';
 import type { AuthFileItem, ClineQuotaData, ClineQuotaState, ClineQuotaWindow } from '@/types';
 import { apiClient } from '@/services/api/client';
+import { useAuthStore } from '@/stores';
+import { normalizeApiBase } from '@/utils/connection';
 import {
   createStatusError,
   formatQuotaResetTime,
@@ -118,7 +120,8 @@ const fetchClineQuota = async (file: AuthFileItem, t: TFunction): Promise<ClineQ
   }
 
   try {
-    const payload = await apiClient.post<unknown>('/quota/fetch', {
+    const apiBase = normalizeApiBase(useAuthStore.getState().apiBase);
+    const payload = await apiClient.post<unknown>(`${apiBase}/v0/management/quota/fetch`, {
       auth_index: authIndex,
       provider: 'cline',
     });

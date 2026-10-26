@@ -1,4 +1,6 @@
 import { apiClient } from './client';
+import { useAuthStore } from '@/stores';
+import { normalizeApiBase } from '@/utils/connection';
 
 export interface UsageRecordItem {
   api_key: string;
@@ -35,9 +37,9 @@ export const usageStatisticsApi = {
    * 获取所有使用统计数据并打平为列表
    */
   async getUsage(): Promise<UsageRecordItem[]> {
-    const rawData = await apiClient.get<UsageStatisticsResponse>(
-      '/plugins/usage-statistics/usage'
-    );
+    const apiBase = normalizeApiBase(useAuthStore.getState().apiBase);
+    const url = `${apiBase}/v0/management/plugins/usage-statistics/usage`;
+    const rawData = await apiClient.get<UsageStatisticsResponse>(url);
     
     const records: UsageRecordItem[] = [];
     if (!rawData) return records;
@@ -66,9 +68,8 @@ export const usageStatisticsApi = {
    * 删除指定的请求记录
    */
   async deleteUsage(ids: string[]): Promise<{ ok: boolean }> {
-    return apiClient.delete<{ ok: boolean }>(
-      '/plugins/usage-statistics/usage',
-      { data: { ids } }
-    );
+    const apiBase = normalizeApiBase(useAuthStore.getState().apiBase);
+    const url = `${apiBase}/v0/management/plugins/usage-statistics/usage`;
+    return apiClient.delete<{ ok: boolean }>(url, { data: { ids } });
   },
 };
