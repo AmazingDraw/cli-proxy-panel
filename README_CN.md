@@ -1,132 +1,72 @@
-# CLI Proxy API 纯净增强管理中心 (CLI Proxy Panel)
+# CLI Proxy API 纯净增强管理面板 (CLI Proxy Panel)
 
-用于管理与运维 **CLI Proxy API** 的单文件定制版 Web UI（React 19 + TypeScript + Vite 8），基于官方 `router-for-me/Cli-Proxy-API-Management-Center` 深度定制增强。
-
-[English Documentation](README.md)
-
----
-
-## 🌟 核心定制亮点
-
-- **🚫 彻底纯净无广告**：完全剔除官方内置的全部三方赞助商横幅、推广软文与广告接口（APIMart、ApiKeyFun 等），还原本质开发体验。
-- **⚡ Cursor 全生态深度打通**：
-  - 原生支持 **Cursor OAuth 登录** 并补全官方丢失的品牌专属矢量图标。
-  - **多维度配额追踪**：精准呈现 Cursor 使用额度、计费周期重置时间与当前计划详情。
-  - **用量统计可视化**：深度集成 `cursor-for-cpa` 与用量统计插件，图表直观展示 Token 与请求流水。
-- **🛡️ 装甲级防闪白与深浅模式自适应**：
-  - 剔除官方硬编码的 `#ffffff` 静态底色，全面采用主题语义变量 `var(--bg-secondary)`。
-  - 针对 Docker 容器、局域网或 NAS 等网络延迟环境，为 `<iframe>` 注入初始加载透明遮罩与平滑淡入，彻底消灭切换插件页面时的白色画布瞬时曝光。
-  - 全局自适应深色（`#151412`）、浅色（`#faf9f5`）与纯白模式。
-- **🤖 Devin 官方原生接入**：
-  - 完整支持 Devin 官方 OAuth 登录与会话授权。
-  - 配额卡片标题智能优先展示凭据的**真实账户邮箱**，杜绝无意义的机器哈希序列号。
-- **🐾 Cline / Cline Pass 全生态打通与额度监控**：
-  - 原生支持 **Cline Pass** 凭证识别与品牌专属图标（`cline-<email>` 身份展示）。
-  - **多窗口配额追踪**：实时解析并可视化呈现 Cline Pass 套餐（如 5h、7d 周度、30d 月度滚动窗口百分比与重置倒计时）。
-  - **模型目录与禁用支持**：内置 Cursor 与 Cline 完整静态模型目录，完美支持认证管理中的 OAuth 模型禁用与别名自定义。
-  - **多协议生态适配**：与 `cline-for-cpa` / CLI Proxy 后端深度协同，支持 `cline-pass/*` 订阅模型转发。
-- **🧹 提供商与交互净化**：
-  - 下线冗余杂乱的第三方转售渠道与多余登录入口，精简侧栏与路由。
-  - 聚焦核心大模型代理与日常运维，界面更加紧凑专业。
+专为 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) 打造的单文件纯净增强版 Web 管理控制台（React 19 + TypeScript + Vite 8）。
+去除了全部商业营销与第三方转售渠道，原生深度打通 Cursor、Cline 与 Devin 生态，具备装甲级防闪白与本地 SQLite 用量统计能力。
 
 ---
 
-## 🏗️ 双端拓扑架构
+## 🌟 核心特性
 
-管理面板编译产物为**单文件全内联 HTML (`management.html`)**，无缝部署在双端节点协同值守：
-
-| 节点 | 运行环境 | 访问端点 | 部署路径 | 守护方式 |
-| :--- | :--- | :--- | :--- | :--- |
-| **Mac 本地节点** | macOS Apple Silicon (`darwin_arm64`) | `http://127.0.0.1:8317/management.html` | `~/.cli-proxy-api/static/management.html` | macOS LaunchAgent (`com.cli-proxy-api`) |
-| **华硕 NAS 节点** | Linux x86_64 (`linux_amd64`) | `http://169.254.1.2:8317/management.html` | `/volume1/Docker/cliproxy/static/management.html` | Docker 容器 (`cliproxy`) |
+- 🚫 **彻底纯净无广告**：彻底拔除全部赞助商横幅（APIMart、SponsorCard 等）与外部推广渠道，还原极简专注的开发控制台。
+- ⚡ **Cursor 全生态深度打通**：
+  - 原生支持 Cursor OAuth 登录流程与品牌专属矢量图标；
+  - 实时追踪 Cursor 使用额度、套餐计划（Plan）与重置倒计时；
+  - 内置 Cursor 静态模型字典，支持模型别名与禁用规则。
+- 🐾 **Cline / Cline Pass 深度接入**：
+  - 原生识别 Cline Pass 凭据，自动标注 `[OAuth]` 与 `[API Key]` 优雅微光胶囊；
+  - 专属额度看板：实时解析 5h、7d 周度与 30d 月度滚动窗口百分比与重置倒计时；
+  - 自动归入独立 Cline Tab，支持单凭证手动刷新。
+- 🛡️ **装甲级防闪白与深浅模式自适应**：
+  - 剔除硬编码静态底色，全面采用主题语义变量 `var(--bg-secondary)`；
+  - 针对 Docker、局域网或远程延迟环境，为 `<iframe>` 注入透明遮罩与平滑淡入，彻底杜绝切换插件页面时的刺眼白屏。
+- 📊 **SQLite 使用统计大盘**：
+  - 侧栏直达「使用统计」看板，直连本地 `usage-statistics` 数据库；
+  - 直观呈现 Token 消耗趋势、响应耗时分布、首字时间（TTFT）与历史调用明细。
+- 🤖 **Devin 原生邮箱直显**：配额卡片优先展示凭据的真实账户邮箱，告别冷冰冰的散列 UID。
 
 ---
 
-## 🚀 快速开始与构建
+## 🚀 快速构建与部署
 
-### 1. 本地开发与调试
+### 1. 编译单文件
+面板编译产物为单个纯静态 HTML 文件（所有 JS、CSS、SVG 资源完全内联）：
+
 ```bash
 bun install --frozen-lockfile
-bun run dev
-```
-启动后打开 `http://localhost:5173`，输入后端的管理密钥（Management Key）即可直连测试。
-
-### 2. 一键编译与本地部署 (推荐)
-本项目内置专用自动化脚本 `rebuild-pure-panel.sh`：
-```bash
-# 默认模式：编译本地当前定制源码，打包并部署到 Mac 本机 static 目录
-bash rebuild-pure-panel.sh
-
-# 升级模式：拉取官方最新 main 分支并自动 rebase 本地定制提交（需验证兼容）
-bash rebuild-pure-panel.sh --upgrade
-```
-
-### 3. 手动单文件构建
-```bash
 bun run build
-# 产物输出在 dist/index.html，资源已全部内联（Singlefile Bundle）。
-# 将其拷贝至宿主的 static 目录并重命名为 management.html 即可热生效。
+# 产物输出于 dist/index.html（约 3.2MB）
+```
+
+### 2. 部署到服务
+将产物复制到代理后端的静态托管目录并重命名为 `management.html`：
+
+```bash
+# Mac 本地部署示例
+cp dist/index.html ~/.cli-proxy-api/static/management.html
+
+# 华硕 NAS Docker 容器部署示例
+cp dist/index.html /volume1/Docker/cliproxy/static/management.html
 ```
 
 ---
 
-## 🔑 连接与安全配置说明
+## 🔍 运维铁律
 
-### 1. 连接地址
-支持输入 `localhost:8317`、`127.0.0.1:8317`、`http://169.254.1.2:8317` 等格式，Web UI 会自动归一化处理。
-
-### 2. 管理密钥（Management Key）
-管理密钥不同于客户端调用大模型接口的代理 `api-keys`，它用于管理接口 `/v0/management/*` 的鉴权保护：
-- 请求头携带：`Authorization: Bearer <MANAGEMENT_KEY>`
-
-### 3. 防官方覆盖锁定（永久必须保留）
-在 `config.yaml` 中务必确保配置以下选项，防止官方二进制在启动时自动下载官方带广告的 HTML 覆写本地定制面板：
-```yaml
-remote-management:
-  allow-remote-management: true
-  disable-auto-update-panel: true   # 👈 锁定禁止自动拉取覆盖
-```
+1. **优雅延时重启（强制 3 秒延时）**：
+   无论前端或后端服务，重启必须附加 `sleep 3`，防止端口并发抖动：
+   - Mac 端：`launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3`
+   - NAS 容器端：`docker restart cliproxy && sleep 3`
+2. **Kimi 真实浏览器核验**：
+   面板构建分发后，必须通过 `kimi-webbridge` 驱动真实浏览器实机审查 `/usage-statistics`、`/ai-providers` 与 `/quota`，确保 0 缺陷交付。
+3. **防官方自动覆盖锁定**：
+   在 `config.yaml` 中永久保持：
+   ```yaml
+   remote-management:
+     disable-auto-update-panel: true   # 锁定禁止官方二进制自动拉取覆盖
+   ```
 
 ---
 
-## 🔍 验证规范与运维准则（双端 3 秒延时重启 + Kimi 真实浏览器核验）
+## 📜 开源协议
 
-为确保生产环境部署 100% 稳定无异常，后续任何前端或后端更新必须严格执行以下两条规范：
-
-1. **优雅延时重启（无论前端还是后端，强制加入 3 秒延时等待）**：
-   - **Mac 本机节点**：
-     ```bash
-     launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3
-     ```
-   - **NAS 容器节点**：
-     ```bash
-     docker restart cliproxy && sleep 3
-     ```
-   杜绝端口并发碰撞与无延时导致的假死断流。
-
-2. **Kimi WebBridge 真实浏览器审查（硬性验收步骤）**：
-   - 每次重构打包发布后，**必须通过 `kimi-webbridge` 驱动真实浏览器进行最终验收**，坚决杜绝未经验收盲目交付：
-     1. 检查守护状态：`~/.kimi-webbridge/bin/kimi-webbridge status`
-     2. 导航并真机实测核心页面：
-        - `#/usage-statistics`：核对 Token 趋势、耗时大盘与 SQLite 请求流水；
-        - `#/ai-providers`：核对纯净提供商列表（彻底排除 FennoAI、七牛云等商业推广项）；
-        - `#/quota`：核对 Cursor / Cline 等独立 Tab 额度窗口与重置倒计时。
-     3. 捕获真实渲染截图进行审查自证。
-
----
-
-## 🛠️ 技术栈
-
-- **前端框架**：React 19 + TypeScript 6.0
-- **构建工具**：Vite 8 (`vite-plugin-singlefile`) + SCSS
-- **状态管理**：Zustand
-- **路由导航**：React Router DOM v7 (HashRouter)
-- **网络通信**：Axios + SSE 流式监听
-- **国际化**：i18next (中 / 繁 / 英 / 俄 4 种语言)
-
----
-
-## 📜 许可与来源
-
-- 官方上游仓库：[router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center)
-- 本项目遵循 MIT 开源协议。
+本项目基于 MIT License 开源，衍生自 [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center)。

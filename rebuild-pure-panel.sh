@@ -18,13 +18,13 @@
 #   （无）       默认：编译本地当前代码并部署到静态目录（不触碰 git）
 #   --upgrade   拉官方最新并 rebase 本地定制（需人工确认 rebase 兼容性）
 #
-# 定制源码：私有仓 git@github.com:ShuaiHui/cli-proxy-panel.git
+# 定制源码：开源仓 git@github.com:AmazingDraw/cli-proxy-panel.git
 # =============================================================
 set -euo pipefail
 
 PANEL_DIR="/Users/shuaihui/Projects/Cli-Proxy-API-Management-Center"
 TARGET_HTML="/Users/shuaihui/.cli-proxy-api/static/management.html"
-PRIVATE_REPO="git@github.com:ShuaiHui/cli-proxy-panel.git"
+OPEN_REPO="git@github.com:AmazingDraw/cli-proxy-panel.git"
 
 UPGRADE=0
 if [[ "${1:-}" == "--upgrade" ]]; then UPGRADE=1; fi
@@ -34,7 +34,7 @@ echo "    模式: $([[ "${UPGRADE}" == "1" ]] && echo "--upgrade 拉官方最新
 
 if [[ ! -d "${PANEL_DIR}" ]]; then
   echo "[-] 前端项目目录不存在: ${PANEL_DIR}"
-  echo "    请克隆私有定制仓: git clone ${PRIVATE_REPO} ${PANEL_DIR}"
+  echo "    请克隆开源定制仓: git clone ${OPEN_REPO} ${PANEL_DIR}"
   exit 1
 fi
 
@@ -50,10 +50,10 @@ fi
 
 missing_customizations() {
   echo "[-] 未检测到本地定制提交。"
-  echo "    请从私有仓恢复:"
-  echo "      git clone ${PRIVATE_REPO} ${PANEL_DIR}"
+  echo "    请从开源仓恢复:"
+  echo "      git clone ${OPEN_REPO} ${PANEL_DIR}"
   echo "    或:"
-  echo "      cd ${PANEL_DIR} && git fetch private main && git reset --hard private/main"
+  echo "      cd ${PANEL_DIR} && git fetch amazingdraw main && git reset --hard amazingdraw/main"
   exit 1
 }
 

@@ -1,118 +1,72 @@
-# CLI Proxy API Management Center (Pure Edition)
+# CLI Proxy API 纯净增强管理面板 (CLI Proxy Panel)
 
-A customized, single-file Web UI (React 19 + TypeScript + Vite 8) for operating and troubleshooting **CLI Proxy API** via its **Management API**. Deeply customized and enhanced based on upstream `router-for-me/Cli-Proxy-API-Management-Center`.
-
-[中文文档](README_CN.md)
-
----
-
-## 🌟 Key Custom Enhancements
-
-- **🚫 Completely Ad-Free**: Stripped all third-party sponsor banners, referral promotions, and ad tracking endpoints (APIMart, ApiKeyFun, etc.) for a clean, distraction-free developer experience.
-- **⚡ Full Cursor Ecosystem Integration**:
-  - Native **Cursor OAuth login** support with the official brand vector icon restored.
-  - **Multi-dimensional Quota Tracking**: Real-time tracking of Cursor usage, plan tiers, and billing window reset countdowns.
-  - **Usage Statistics Dashboard**: Deep integration with `cursor-for-cpa` and usage statistics plugin for token and request observability.
-- **🛡️ Armor-Grade Anti-White-Flash & Adaptive Themes**:
-  - Replaced hardcoded `#ffffff` static background colors with theme semantic variables (`var(--bg-secondary)`).
-  - Designed for network-latency environments (Docker containers, LAN, or NAS): injected initial loading opacity masking and smooth transition fade-in for `<iframe>` elements to eliminate native canvas white flash.
-  - Fully adaptive across Dark (`#151412`), Light (`#faf9f5`), and Pure White modes.
-- **🤖 Devin Official Native Integration**:
-  - Built-in Devin OAuth login flow and session token management.
-  - Quota card headers intelligently prioritize showing the credential's **real account email**, eliminating unreadable machine hashes.
-- **🐾 Cline / Cline Pass Ecosystem & Quota Tracking**:
-  - Full support for **Cline Pass** credential recognition and official brand icon (showing `cline-<email>` identity).
-  - **Multi-window Quota Tracking**: Real-time parsing and visualization of Cline Pass plans (5h rolling, 7d weekly, and 30d monthly usage percentages with reset countdowns).
-  - **Model Catalog & Disabling**: Built-in static catalog for Cursor and Cline models, fully unlocking custom OAuth model disabling and aliasing in Credential Management.
-  - **Multi-protocol Ecosystem**: Deep synergy with `cline-for-cpa` and CLI Proxy backend for `cline-pass/*` subscription model routing.
-- **🧹 Streamlined Providers & Navigation**:
-  - Removed redundant third-party reseller channels and extraneous login methods to keep the workbench clean and focused.
+专为 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) 打造的单文件纯净增强版 Web 管理控制台（React 19 + TypeScript + Vite 8）。
+去除了全部商业营销与第三方转售渠道，原生深度打通 Cursor、Cline 与 Devin 生态，具备装甲级防闪白与本地 SQLite 用量统计能力。
 
 ---
 
-## 🏗️ Dual-Node Architecture
+## 🌟 核心特性
 
-The management center builds into a **single-file inlined HTML (`management.html`)**, deployed seamlessly across dual nodes:
-
-| Node | Environment | Endpoint | Deployment Path | Daemon |
-| :--- | :--- | :--- | :--- | :--- |
-| **Mac Local Node** | macOS Apple Silicon (`darwin_arm64`) | `http://127.0.0.1:8317/management.html` | `~/.cli-proxy-api/static/management.html` | macOS LaunchAgent (`com.cli-proxy-api`) |
-| **ASUSTOR NAS Node** | Linux x86_64 (`linux_amd64`) | `http://169.254.1.2:8317/management.html` | `/volume1/Docker/cliproxy/static/management.html` | Docker Container (`cliproxy`) |
+- 🚫 **彻底纯净无广告**：彻底拔除全部赞助商横幅（APIMart、SponsorCard 等）与外部推广渠道，还原极简专注的开发控制台。
+- ⚡ **Cursor 全生态深度打通**：
+  - 原生支持 Cursor OAuth 登录流程与品牌专属矢量图标；
+  - 实时追踪 Cursor 使用额度、套餐计划（Plan）与重置倒计时；
+  - 内置 Cursor 静态模型字典，支持模型别名与禁用规则。
+- 🐾 **Cline / Cline Pass 深度接入**：
+  - 原生识别 Cline Pass 凭据，自动标注 `[OAuth]` 与 `[API Key]` 优雅微光胶囊；
+  - 专属额度看板：实时解析 5h、7d 周度与 30d 月度滚动窗口百分比与重置倒计时；
+  - 自动归入独立 Cline Tab，支持单凭证手动刷新。
+- 🛡️ **装甲级防闪白与深浅模式自适应**：
+  - 剔除硬编码静态底色，全面采用主题语义变量 `var(--bg-secondary)`；
+  - 针对 Docker、局域网或远程延迟环境，为 `<iframe>` 注入透明遮罩与平滑淡入，彻底杜绝切换插件页面时的刺眼白屏。
+- 📊 **SQLite 使用统计大盘**：
+  - 侧栏直达「使用统计」看板，直连本地 `usage-statistics` 数据库；
+  - 直观呈现 Token 消耗趋势、响应耗时分布、首字时间（TTFT）与历史调用明细。
+- 🤖 **Devin 原生邮箱直显**：配额卡片优先展示凭据的真实账户邮箱，告别冷冰冰的散列 UID。
 
 ---
 
-## 🚀 Quick Start & Building
+## 🚀 快速构建与部署
 
-### 1. Local Development
+### 1. 编译单文件
+面板编译产物为单个纯静态 HTML 文件（所有 JS、CSS、SVG 资源完全内联）：
+
 ```bash
 bun install --frozen-lockfile
-bun run dev
-```
-Open `http://localhost:5173` and connect with your Management Key.
-
-### 2. One-Click Build & Deploy (Recommended)
-This repository includes a dedicated build automation script `rebuild-pure-panel.sh`:
-```bash
-# Default mode: compile current custom code and deploy to Mac static directory
-bash rebuild-pure-panel.sh
-
-# Upgrade mode: fetch upstream main and rebase custom commits (requires compatibility review)
-bash rebuild-pure-panel.sh --upgrade
-```
-
-### 3. Manual Single-File Build
-```bash
 bun run build
-# Output is generated at dist/index.html with all assets inlined.
-# Copy to the proxy static directory and rename to management.html for hot-reloading.
+# 产物输出于 dist/index.html（约 3.2MB）
+```
+
+### 2. 部署到服务
+将产物复制到代理后端的静态托管目录并重命名为 `management.html`：
+
+```bash
+# Mac 本地部署示例
+cp dist/index.html ~/.cli-proxy-api/static/management.html
+
+# 华硕 NAS Docker 容器部署示例
+cp dist/index.html /volume1/Docker/cliproxy/static/management.html
 ```
 
 ---
 
-## 🔑 Connection & Security Notes
+## 🔍 运维铁律
 
-### 1. API Address
-Accepts `localhost:8317`, `127.0.0.1:8317`, or LAN IP addresses like `http://169.254.1.2:8317`. The Web UI automatically normalizes the input.
-
-### 2. Management Key
-The management key authenticates `/v0/management/*` administrative calls (distinct from client proxy `api-keys`):
-- Transmitted as: `Authorization: Bearer <MANAGEMENT_KEY>`
-
-### 3. Anti-Overwrite Lock (Critical Setting)
-In `config.yaml`, ensure the auto-update panel setting is disabled so the binary does not overwrite your custom panel with official upstream assets on startup:
-```yaml
-remote-management:
-  allow-remote-management: true
-  disable-auto-update-panel: true   # 👈 Lock to prevent auto-overwriting
-```
+1. **优雅延时重启（强制 3 秒延时）**：
+   无论前端或后端服务，重启必须附加 `sleep 3`，防止端口并发抖动：
+   - Mac 端：`launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3`
+   - NAS 容器端：`docker restart cliproxy && sleep 3`
+2. **Kimi 真实浏览器核验**：
+   面板构建分发后，必须通过 `kimi-webbridge` 驱动真实浏览器实机审查 `/usage-statistics`、`/ai-providers` 与 `/quota`，确保 0 缺陷交付。
+3. **防官方自动覆盖锁定**：
+   在 `config.yaml` 中永久保持：
+   ```yaml
+   remote-management:
+     disable-auto-update-panel: true   # 锁定禁止官方二进制自动拉取覆盖
+   ```
 
 ---
 
-## 🔍 Verification & Operations Guidelines (3s Delayed Restart & Kimi Browser Inspection)
+## 📜 开源协议
 
-1. **Graceful Delayed Restart (Mandatory 3s delay for both frontend and backend)**:
-   - **Mac Local Node**: `launchctl kickstart -k gui/$(id -u)/com.cli-proxy-api && sleep 3`
-   - **NAS Docker Node**: `docker restart cliproxy && sleep 3`
-2. **Kimi WebBridge Browser Verification (Mandatory Acceptance Step)**:
-   - Always verify via `kimi-webbridge` driving real Edge browser to validate live rendering before final sign-off:
-     - `#/usage-statistics`: Validate Token trends, latency metrics, and SQLite log stream (confirming zero 404s).
-     - `#/ai-providers`: Confirm stripped commercial promos (FennoAI, Qiniu Cloud).
-     - `#/quota`: Verify Cursor and Cline dedicated tabs, brand logos, and multi-window quota meters.
-
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: React 19 + TypeScript 6.0
-- **Build Tool**: Vite 8 (`vite-plugin-singlefile`) + SCSS
-- **State Management**: Zustand
-- **Routing**: React Router DOM v7 (HashRouter)
-- **Networking**: Axios + Server-Sent Events (SSE)
-- **Internationalization**: i18next (zh-CN, zh-TW, en, ru)
-
----
-
-## 📜 License & Attribution
-
-- Upstream Project: [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center)
-- Licensed under the MIT License.
+本项目基于 MIT License 开源，衍生自 [router-for-me/Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center)。
