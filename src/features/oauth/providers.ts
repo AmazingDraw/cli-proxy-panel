@@ -2,7 +2,6 @@ import type { BuiltInOAuthProvider } from '@/services/api';
 import { getPluginTitle, resolvePluginAssetURL } from '@/features/plugins/pluginResources';
 import type { PluginListEntry } from '@/types';
 import iconMeta from '@/assets/icons/meta.svg';
-import iconCodex from '@/assets/icons/codex.svg';
 import iconClaude from '@/assets/icons/claude.svg';
 import iconAntigravity from '@/assets/icons/antigravity.svg';
 // 赞助卡用的 App 图标版：K 与蓝点等比内缩进方块，蓝点不再顶出圆角
@@ -82,14 +81,6 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
   },
   {
     kind: 'builtin',
-    id: 'codex',
-    label: 'Codex',
-    titleKey: 'auth_login.codex_oauth_title',
-    icon: iconCodex,
-    flow: 'browser',
-  },
-  {
-    kind: 'builtin',
     id: 'anthropic',
     label: 'Claude',
     titleKey: 'auth_login.anthropic_oauth_title',
@@ -142,7 +133,6 @@ const BUILTIN_PROVIDER_IDS = new Set<string>(OAUTH_PROVIDERS.map((provider) => p
 
 /** 后端接受手动回调提交的内置提供商；插件提供商一律允许。 */
 export const CALLBACK_SUPPORTED = new Set<string>([
-  'codex',
   'anthropic',
   'antigravity',
   'xai',

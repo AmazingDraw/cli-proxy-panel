@@ -1,23 +1,18 @@
-import { useId, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useRevealGroup } from '@/hooks/motion';
 import { useAuthStore, useThemeStore } from '@/stores';
-import iconVertex from '@/assets/icons/vertex.svg';
-import iconCodex from '@/assets/icons/codex.svg';
 import { KIMI_DISPLAY_NAME } from '@/features/providers/kimi';
 import { OAuthHeader } from './components/OAuthHeader';
 import { ProviderTile } from './components/ProviderTile';
 import { SponsorCard, type SponsorCardSite } from './components/SponsorCard';
 import { OAuthFlowDialog, type DialogHeading } from './components/OAuthFlowDialog';
-import { VertexImportDialog } from './components/VertexImportDialog';
-import { SiwcBindDialog } from './components/SiwcBindDialog';
 import {
   useOAuthFlows,
   usePluginOAuthProviders,
   type ProviderFlowState,
 } from './hooks/useOAuthFlows';
-import { useVertexImport } from './hooks/useVertexImport';
 import {
   isSponsor,
   OAUTH_PROVIDERS,
@@ -26,12 +21,6 @@ import {
   type OAuthProviderCard,
 } from './providers';
 import styles from './OAuthPage.module.scss';
-
-/** 对话框焦点标识：Vertex 不是 OAuth 提供商，用保留 id 避免与提供商冲突。 */
-const VERTEX_DIALOG_ID = '__vertex__';
-const VERTEX_LABEL = 'Vertex AI';
-
-type DialogTarget = { kind: 'oauth'; id: string } | { kind: 'vertex' };
 
 /**
  * OAuth 登录：提供商画廊（一屏看全）+ 聚焦的授权对话框。
@@ -45,7 +34,6 @@ export function OAuthPage() {
   const apiBase = useAuthStore((state) => state.apiBase);
   const resolvedTheme = useThemeStore((state) => state.resolvedTheme);
   const revealRef = useRevealGroup<HTMLDivElement>();
-  const otherMethodsId = useId();
 
   const pluginProviders = usePluginOAuthProviders(apiBase);
   const providerCards = useMemo<OAuthProviderCard[]>(
@@ -54,23 +42,12 @@ export function OAuthPage() {
   );
 
   const focusedRef = useRef<string | null>(null);
-  const [dialog, setDialog] = useState<DialogTarget | null>(null);
+  const [dialogID, setDialogID] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [siwcOpen, setSiwcOpen] = useState(false);
-  // 每次打开换新 key 重新挂载（全新选择与会话）；关闭后保持挂载，让退出动画走完
-  const [siwcKey, setSiwcKey] = useState(0);
-  const openSiwc = () => {
-    setSiwcKey((key) => key + 1);
-    setSiwcOpen(true);
-  };
 
   const flows = useOAuthFlows({
     providerCards,
     isFocused: (provider) => focusedRef.current === provider,
-  });
-  const vertexImport = useVertexImport({
-    isFocused: () => focusedRef.current === VERTEX_DIALOG_ID,
-    onCredentialAdded: flows.recordCredentialAdded,
   });
 
   const labelOf = (card: OAuthProviderCard) =>
@@ -116,29 +93,23 @@ export function OAuthPage() {
 
   const openProvider = (card: OAuthProviderCard) => {
     focusedRef.current = card.id;
-    setDialog({ kind: 'oauth', id: card.id });
+    setDialogID(card.id);
     setDialogOpen(true);
     // 已有进行中/失败/刚成功的尝试 → 只是重新打开查看；否则立即开始登录
     if (!flows.states[card.id]?.status) void flows.startAuth(card.id);
   };
 
-  const openVertex = () => {
-    focusedRef.current = VERTEX_DIALOG_ID;
-    setDialog({ kind: 'vertex' });
-    setDialogOpen(true);
-  };
-
   const closeDialog = () => {
-    if (dialog?.kind === 'oauth') flows.dismissSuccess(dialog.id);
-    if (dialog?.kind === 'vertex' && vertexImport.vertex.result) vertexImport.resetForAnother();
+    if (dialogID) flows.dismissSuccess(dialogID);
     focusedRef.current = null;
     setDialogOpen(false);
   };
 
   const viewAuthFiles = () => navigate('/auth-files');
 
-  const dialogCard =
-    dialog?.kind === 'oauth' ? providerCards.find((card) => card.id === dialog.id) : undefined;
+  const dialogCard = dialogID
+    ? providerCards.find((card) => card.id === dialogID)
+    : undefined;
   const providerCount = providerCards.length;
   const sponsorCards = providerCards.filter(isSponsor);
   const regularCards = providerCards.filter((card) => !isSponsor(card));
@@ -201,31 +172,9 @@ export function OAuthPage() {
       )}
       <div className={styles.grid}>{regularCards.map(renderTile)}</div>
 
-      <section className={styles.section} aria-labelledby={otherMethodsId}>
-        <h2 className={styles.sectionLabel} id={otherMethodsId} data-reveal>
-          {t('auth_login.other_login_methods')}
-        </h2>
-        <div className={styles.grid}>
-          <ProviderTile
-            label={VERTEX_LABEL}
-            caption={t('vertex_import.file_label')}
-            icon={iconVertex}
-            index={regularCards.length + tileIndexOffset}
-            onOpen={openVertex}
-          />
-          <ProviderTile
-            label={t('siwc.bind')}
-            caption={t('siwc.tile_caption')}
-            icon={iconCodex}
-            index={regularCards.length + tileIndexOffset + 1}
-            onOpen={openSiwc}
-          />
-        </div>
-      </section>
-
       {dialogCard && (
         <OAuthFlowDialog
-          open={dialogOpen && dialog?.kind === 'oauth'}
+          open={dialogOpen}
           providerId={dialogCard.id}
           heading={headingOf(dialogCard)}
           state={flows.states[dialogCard.id] ?? {}}
@@ -238,31 +187,6 @@ export function OAuthPage() {
           onCallbackSubmit={() => void flows.submitCallback(dialogCard.id)}
           onViewAuthFiles={viewAuthFiles}
           onClose={closeDialog}
-        />
-      )}
-
-      <VertexImportDialog
-        open={dialogOpen && dialog?.kind === 'vertex'}
-        heading={{
-          title: t('vertex_import.title'),
-          caption: t('vertex_import.file_label'),
-          icon: iconVertex,
-        }}
-        vertex={vertexImport.vertex}
-        onPickFile={vertexImport.pickFile}
-        onLocationChange={vertexImport.setLocation}
-        onImport={() => void vertexImport.importCredential()}
-        onImportAnother={vertexImport.resetForAnother}
-        onViewAuthFiles={viewAuthFiles}
-        onClose={closeDialog}
-      />
-
-      {siwcKey > 0 && (
-        <SiwcBindDialog
-          key={siwcKey}
-          open={siwcOpen}
-          onClose={() => setSiwcOpen(false)}
-          onViewAuthFiles={viewAuthFiles}
         />
       )}
     </div>
