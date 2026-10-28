@@ -106,8 +106,9 @@ describe('Kimi provider', () => {
     expect(PROVIDER_LOGOS.kimi.themeSurface).toBeTrue();
   });
 
-  test('is the first provider in the catalog', () => {
-    expect(PROVIDER_BRAND_ORDER[0]).toBe('kimi');
+  test('stays in the catalog after the primary API brands', () => {
+    expect(PROVIDER_BRAND_ORDER[0]).toBe('openaiCompatibility');
+    expect(PROVIDER_BRAND_ORDER).toContain('kimi');
   });
 
   test('recognizes Kimi configs only by supported protocol endpoint', () => {

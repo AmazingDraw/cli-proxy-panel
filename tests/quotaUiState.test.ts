@@ -47,8 +47,8 @@ afterAll(() => {
 
 describe('quota ui state', () => {
   test('round-trips both preferences', () => {
-    writeQuotaUiState({ tab: 'codex', sortMode: 'soonest' });
-    expect(readQuotaUiState()).toEqual({ tab: 'codex', sortMode: 'soonest' });
+    writeQuotaUiState({ tab: 'claude', sortMode: 'soonest' });
+    expect(readQuotaUiState()).toEqual({ tab: 'claude', sortMode: 'soonest' });
   });
 
   test('retains the Devin tab across visits', () => {

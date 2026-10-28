@@ -77,7 +77,7 @@ describe('Interactions API key provider', () => {
     expect(PROVIDER_DESCRIPTORS.interactions.baseUrlRequired).toBe(false);
     expect(PROVIDER_DESCRIPTORS.interactions.supportsTestModel).toBe(true);
     expect(PROVIDER_BRAND_ORDER.indexOf('interactions')).toBe(
-      PROVIDER_BRAND_ORDER.indexOf('gemini') + 1
+      PROVIDER_BRAND_ORDER.indexOf('meta') + 1
     );
     expect(MODEL_DISCOVERY_BRANDS).toContain('interactions');
   });

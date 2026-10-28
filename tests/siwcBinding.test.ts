@@ -123,10 +123,10 @@ describe('SIWC binding', () => {
     expect(targets.map(getSiwcBindingStatus)).toEqual(['unbound', 'bound', 'active']);
   });
 
-  test('binding entry lives on the OAuth page, not on auth file cards', () => {
+  test('binding dialog is not mounted on the OAuth page or on auth file cards', () => {
     const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8');
     const page = read('../src/features/oauth/OAuthPage.tsx');
-    expect(page).toContain('<SiwcBindDialog');
+    expect(page).not.toContain('<SiwcBindDialog');
     const card = read('../src/features/authFiles/components/AuthFileCard.tsx');
     expect(card).not.toContain('SiwcBindDialog');
     expect(card).not.toContain('siwc.rebind');

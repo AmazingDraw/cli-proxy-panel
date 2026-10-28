@@ -56,31 +56,32 @@ describe('resolveQuotaProviderType', () => {
 });
 
 describe('classifyQuotaFiles', () => {
-  test('drops unsupported and disabled files', () => {
+  test('drops unsupported, disabled, and providers without a quota tab', () => {
     const entries = classifyQuotaFiles(FILES);
     expect(entries.map((entry) => entry.file.name)).not.toContain('gemini-a.json');
     expect(entries.map((entry) => entry.file.name)).not.toContain('claude-off.json');
-    expect(entries).toHaveLength(5);
+    expect(entries.map((entry) => entry.file.name)).not.toContain('codex-a.json');
+    expect(entries.map((entry) => entry.file.name)).not.toContain('codex-b.json');
+    expect(entries).toHaveLength(3);
   });
 
   test('orders entries by provider tab order', () => {
     const entries = classifyQuotaFiles(FILES);
-    expect(entries.map((entry) => entry.type)).toEqual(['claude', 'codex', 'codex', 'xai', 'kimi']);
+    expect(entries.map((entry) => entry.type)).toEqual(['claude', 'xai', 'kimi']);
   });
 });
 
 describe('buildTabCounts', () => {
   test('counts per provider plus an all total, zero-filling empty tabs', () => {
     expect(buildTabCounts(classifyQuotaFiles(FILES))).toEqual({
-      all: 5,
+      all: 3,
       claude: 1,
       antigravity: 0,
-      codex: 2,
+      cursor: 0,
+      cline: 0,
       xai: 1,
       kimi: 1,
       devin: 0,
-      meta: 0,
-      plugin: 0,
     });
   });
 });
@@ -89,13 +90,12 @@ describe('filterEntriesByTab', () => {
   const entries = classifyQuotaFiles(FILES);
 
   test("passes everything through on the 'all' tab", () => {
-    expect(filterEntriesByTab(entries, 'all')).toHaveLength(5);
+    expect(filterEntriesByTab(entries, 'all')).toHaveLength(3);
   });
 
   test('filters to a single provider', () => {
-    expect(filterEntriesByTab(entries, 'codex').map((entry) => entry.file.name)).toEqual([
-      'codex-a.json',
-      'codex-b.json',
+    expect(filterEntriesByTab(entries, 'claude').map((entry) => entry.file.name)).toEqual([
+      'claude-a.json',
     ]);
     expect(filterEntriesByTab(entries, 'antigravity')).toEqual([]);
   });
@@ -104,14 +104,14 @@ describe('filterEntriesByTab', () => {
 describe('filterEntriesBySearch', () => {
   const entries = classifyQuotaFiles([
     ...FILES,
-    file('personal.json', 'codex', { email: 'Alice@Example.com' }),
+    file('personal.json', 'kimi', { email: 'Alice@Example.com' }),
     file('work.json', 'claude', { email: 'Alice@Example.com' }),
-    file('private.json', 'codex', { account: 'secret-api-key' }),
+    file('private.json', 'cursor', { account: 'secret-api-key' }),
   ]);
 
   test('ignores case and surrounding whitespace when matching filenames or emails', () => {
-    expect(filterEntriesBySearch(entries, ' CODEX-A ').map(({ file }) => file.name)).toEqual([
-      'codex-a.json',
+    expect(filterEntriesBySearch(entries, ' CLAUDE-A ').map(({ file }) => file.name)).toEqual([
+      'claude-a.json',
     ]);
     expect(filterEntriesBySearch(entries, ' ALICE@example ').map(({ file }) => file.name)).toEqual([
       'work.json',
@@ -128,7 +128,7 @@ describe('filterEntriesBySearch', () => {
 
   test('combines with provider tabs without changing the original entries', () => {
     const before = [...entries];
-    const matches = filterEntriesBySearch(filterEntriesByTab(entries, 'codex'), 'alice');
+    const matches = filterEntriesBySearch(filterEntriesByTab(entries, 'kimi'), 'alice');
     expect(matches.map(({ file }) => file.name)).toEqual(['personal.json']);
     expect(entries).toEqual(before);
   });
@@ -136,15 +136,15 @@ describe('filterEntriesBySearch', () => {
   test('filters before pagination so refresh targets include matches beyond the first page', () => {
     const all = classifyQuotaFiles(
       Array.from({ length: QUOTA_PAGE_SIZE + 2 }, (_, index) =>
-        file(`codex-${index}.json`, 'codex', {
+        file(`claude-${index}.json`, 'claude', {
           email: index >= QUOTA_PAGE_SIZE ? 'target@example.com' : 'other@example.com',
         })
       )
     );
-    const filtered = filterEntriesBySearch(filterEntriesByTab(all, 'codex'), 'target@');
+    const filtered = filterEntriesBySearch(filterEntriesByTab(all, 'claude'), 'target@');
     const sorted = sortQuotaEntries(filtered, 'default', () => null);
     const { pageItems, totalPages } = paginate(sorted, 1, QUOTA_PAGE_SIZE);
-    expect(pageItems.map(({ file }) => file.name)).toEqual(['codex-20.json', 'codex-21.json']);
+    expect(pageItems.map(({ file }) => file.name)).toEqual(['claude-20.json', 'claude-21.json']);
     expect(totalPages).toBe(1);
     expect(paginate(filterEntriesBySearch(all, 'missing'), 1, QUOTA_PAGE_SIZE).pageItems).toEqual(
       []
@@ -205,35 +205,21 @@ describe('sortQuotaEntries', () => {
       entries,
       'soonest',
       resolver({
-        'codex-a.json': 300,
         'claude-a.json': 100,
         'kimi-a.json': 200,
-        'codex-b.json': 400,
         'grok-a.json': 50,
       })
     );
-    expect(byName(sorted)).toEqual([
-      'grok-a.json',
-      'claude-a.json',
-      'kimi-a.json',
-      'codex-a.json',
-      'codex-b.json',
-    ]);
+    expect(byName(sorted)).toEqual(['grok-a.json', 'claude-a.json', 'kimi-a.json']);
   });
 
   test('sinks credentials with no instant, keeping their provider-grouped order', () => {
     // Loading is click-to-fetch, so an unloaded tail is the normal case.
-    const sorted = sortQuotaEntries(
-      entries,
-      'soonest',
-      resolver({ 'codex-b.json': 200, 'kimi-a.json': 100 })
-    );
+    const sorted = sortQuotaEntries(entries, 'soonest', resolver({ 'kimi-a.json': 100 }));
     expect(byName(sorted)).toEqual([
       'kimi-a.json',
-      'codex-b.json',
       // unresolved tail, in the order classifyQuotaFiles produced
       'claude-a.json',
-      'codex-a.json',
       'grok-a.json',
     ]);
   });

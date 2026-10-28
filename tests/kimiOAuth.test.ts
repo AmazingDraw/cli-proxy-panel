@@ -42,19 +42,15 @@ describe('Kimi regional login', () => {
     }
   });
 
-  test('offers both tiles with site-specific registration links', () => {
+  test('offers both regional tiles without a sponsor banner', () => {
     const kimi = OAUTH_PROVIDERS.find((provider) => provider.id === 'kimi');
     const kimiAi = OAUTH_PROVIDERS.find((provider) => provider.id === 'kimi-ai');
     expect(kimi).toMatchObject({ flow: 'device', domain: 'kimi.com' });
     expect(kimiAi).toMatchObject({ flow: 'device', domain: 'kimi.ai' });
-    expect(kimi?.sponsor?.signUpUrl).toBe(KIMI_CHINESE_AFFILIATE_URL);
-    expect(kimiAi?.sponsor?.signUpUrl).toBe(KIMI_INTERNATIONAL_AFFILIATE_URL);
-    // 赞助商：两站排在画廊最前，且只有它们是赞助位
+    expect(kimi?.sponsor).toBeUndefined();
+    expect(kimiAi?.sponsor).toBeUndefined();
     expect(OAUTH_PROVIDERS.slice(0, 2).map((provider) => provider.id)).toEqual(['kimi', 'kimi-ai']);
-    expect(OAUTH_PROVIDERS.filter(isSponsor).map((provider) => provider.id)).toEqual([
-      'kimi',
-      'kimi-ai',
-    ]);
+    expect(OAUTH_PROVIDERS.filter(isSponsor)).toEqual([]);
     expect(new URL(KIMI_CHINESE_AFFILIATE_URL).hostname).toBe('platform.kimi.com');
     expect(new URL(KIMI_INTERNATIONAL_AFFILIATE_URL).hostname).toBe('platform.kimi.ai');
   });

@@ -69,13 +69,13 @@ describe('Muse quota UI integration', () => {
       }
     }
   });
-  test('registers quota and filters disabled credentials', () => {
+  test('recognizes Muse files but does not give them a quota tab', () => {
     expect(QUOTA_PROVIDER_TYPES.has('meta')).toBe(true);
     expect(META_CONFIG.filterFn(file)).toBe(true);
     expect(META_CONFIG.filterFn({ ...file, disabled: true })).toBe(false);
     const entries = classifyQuotaFiles([file, { ...file, name: 'disabled.json', disabled: true }]);
-    expect(entries).toEqual([{ file, type: 'meta' }]);
-    expect(buildTabCounts(entries).meta).toBe(1);
+    expect(entries).toEqual([]);
+    expect(buildTabCounts(entries).meta).toBeUndefined();
   });
 
   test('converts used percent into remaining meters and displays plan and windows', () => {

@@ -69,7 +69,9 @@ describe('generic plugin quota', () => {
 
   test('keeps built-in quota cards when a plugin also advertises quota', () => {
     const builtIns = QUOTA_TAB_ORDER.filter((type) => type !== 'plugin');
-    expect([...BUILT_IN_QUOTA_PROVIDERS].sort()).toEqual([...builtIns].sort());
+    // Codex and Muse stay built-in so they never fall through to the generic
+    // plugin card, but this board does not give them a tab.
+    expect([...BUILT_IN_QUOTA_PROVIDERS].sort()).toEqual([...builtIns, 'codex', 'meta'].sort());
     for (const type of builtIns) {
       for (const capability of [
         { quota_probe: { url: 'https://quota.example.test/usage' } },
@@ -124,8 +126,8 @@ describe('generic plugin quota', () => {
           expect(resolveAuthFileQuotaType(candidate, null)).toBeNull();
           expect(classifyQuotaFiles([{ ...candidate, disabled: true }])).toEqual([]);
         }
-        const [entry] = classifyQuotaFiles([file]);
-        const fetched = QUOTA_ADAPTERS[entry.type].fetchQuota(file, i18n.t);
+        expect(classifyQuotaFiles([file])).toEqual([]);
+        const fetched = QUOTA_ADAPTERS.plugin.fetchQuota(file, i18n.t);
         if (capability.quota_provider) {
           await fetched;
           expect(post.mock.calls).toEqual([['/plugins/kiro-quota/quota', { auth_index: '7' }]]);
