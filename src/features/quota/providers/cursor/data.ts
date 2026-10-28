@@ -299,7 +299,9 @@ const fetchCursorQuota = async (file: AuthFileItem, t: TFunction): Promise<Curso
       const parsed = parseCursorQuotaPayload(payload, t);
       if (parsed) return parsed;
     }
-  } catch {}
+  } catch {
+    // Optional endpoint. Keep the previous error and try the next URL.
+  }
 
   // 3. Fallback 2: GET /auth/usage
   try {
@@ -315,7 +317,9 @@ const fetchCursorQuota = async (file: AuthFileItem, t: TFunction): Promise<Curso
       const parsed = parseCursorQuotaPayload(payload, t);
       if (parsed) return parsed;
     }
-  } catch {}
+  } catch {
+    // Optional endpoint. The error from the primary request is still the one we surface.
+  }
 
   throw createStatusError(lastError || t('cursor_quota.empty_data'), lastStatus);
 };

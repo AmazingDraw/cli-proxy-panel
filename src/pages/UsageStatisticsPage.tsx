@@ -116,6 +116,8 @@ export function UsageStatisticsPage() {
 
   // Filtered records (synchronized with global heatmapPeriod)
   const filteredRecords = useMemo(() => {
+    // The window is anchored when the period or records change, not on every paint.
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now();
     let periodLimitMs = 0;
     if (heatmapPeriod === 'day') periodLimitMs = 24 * 60 * 60 * 1000;
@@ -193,7 +195,7 @@ export function UsageStatisticsPage() {
     const sorted = Array.from(new Set(dates)).sort();
     
     let maxStreak = 0;
-    let currentStreak = 0;
+    let currentStreak: number;
     
     const parseDate = (dStr: string) => {
       const [y, m, d] = dStr.split('-').map(Number);
@@ -350,6 +352,8 @@ export function UsageStatisticsPage() {
   // Generate trend chart data based on selected period
   const chartData = useMemo(() => {
     const points: { label: string; value: number; count: number; dateStr: string }[] = [];
+    // Same clock snapshot as the filtered window: recompute only when inputs change.
+    // eslint-disable-next-line react-hooks/purity
     const now = Date.now();
     
     if (heatmapPeriod === 'day') {
