@@ -69,9 +69,16 @@ if [[ "${UPGRADE}" == "1" ]]; then
   fi
 
   GIT_PROXY_OPTS=()
-  if nc -z -G 1 169.254.1.2 7212 2>/dev/null; then
-    echo "==> 检测到 NAS 出海代理 (169.254.1.2:7212)，优先走 NAS 代理通道..."
-    GIT_PROXY_OPTS=(-c "http.proxy=http://169.254.1.2:7212")
+  NAS_US_HELPER="${NAS_US_HELPER:-$HOME/.gemini/config/plugins/asustor-nas-ops-plugin/skills/asustor-nas-ops/scripts/nas-us-proxy.sh}"
+  nas_proxy=""
+  if [[ -f "$NAS_US_HELPER" ]]; then
+    # shellcheck source=/dev/null
+    . "$NAS_US_HELPER"
+    nas_proxy="$(resolve_nas_us_proxy 2>/dev/null || true)"
+  fi
+  if [[ -n "$nas_proxy" ]] && curl -sS -m 5 -o /dev/null -x "$nas_proxy" https://github.com; then
+    echo "==> 走 NAS Helper 美国口 ($nas_proxy)..."
+    GIT_PROXY_OPTS=(-c "http.proxy=$nas_proxy")
   elif nc -z -G 1 127.0.0.1 7890 2>/dev/null; then
     echo "==> 检测到本机代理 (127.0.0.1:7890)，通过本机代理通道..."
     GIT_PROXY_OPTS=(-c "http.proxy=http://127.0.0.1:7890")
