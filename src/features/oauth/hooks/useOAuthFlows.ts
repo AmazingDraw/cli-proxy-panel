@@ -7,6 +7,7 @@ import { notifyAuthFilesChanged } from '@/features/authFiles/authFilesEvents';
 import { createOAuthAttempts, type OAuthAttempt } from '../oauthAttempts';
 import { validateDevinCallback } from '../devinOAuth';
 import { resolveCallbackUrl } from '../callbackUrl';
+import { resolveOAuthUserCode } from '../userCode';
 import {
   buildPluginOAuthProviderCards,
   type OAuthProviderCard,
@@ -280,7 +281,7 @@ export function useOAuthFlows({ providerCards, isFocused }: UseOAuthFlowsOptions
       }
       updateProviderState(provider, {
         url: res.url,
-        userCode: res.user_code,
+        userCode: resolveOAuthUserCode(res.user_code, res.url),
         state: res.state,
         status: 'waiting',
         polling: true,

@@ -4,10 +4,7 @@ import { apiClient } from '@/services/api/client';
 import { oauthApi } from '@/services/api/oauth';
 import { createOAuthAttempts } from '@/features/oauth/oauthAttempts';
 import { isSponsor, OAUTH_PROVIDERS } from '@/features/oauth/providers';
-import {
-  KIMI_CHINESE_AFFILIATE_URL,
-  KIMI_INTERNATIONAL_AFFILIATE_URL,
-} from '@/features/providers/kimi';
+import { KIMI_CHINESE_AFFILIATE_URL } from '@/features/providers/kimi';
 
 describe('Kimi regional login', () => {
   test('uses separate provider parameters and preserves cancellation', async () => {
@@ -42,30 +39,24 @@ describe('Kimi regional login', () => {
     }
   });
 
-  test('offers both regional tiles without a sponsor banner', () => {
+  test('offers a single Kimi tile without a sponsor banner or international entry', () => {
     const kimi = OAUTH_PROVIDERS.find((provider) => provider.id === 'kimi');
-    const kimiAi = OAUTH_PROVIDERS.find((provider) => provider.id === 'kimi-ai');
     expect(kimi).toMatchObject({ flow: 'device', domain: 'kimi.com' });
-    expect(kimiAi).toMatchObject({ flow: 'device', domain: 'kimi.ai' });
     expect(kimi?.sponsor).toBeUndefined();
-    expect(kimiAi?.sponsor).toBeUndefined();
-    expect(OAUTH_PROVIDERS.slice(0, 2).map((provider) => provider.id)).toEqual(['kimi', 'kimi-ai']);
+    expect(OAUTH_PROVIDERS.some((provider) => provider.id === 'kimi-ai')).toBe(false);
+    expect(OAUTH_PROVIDERS[0]?.id).toBe('kimi');
     expect(OAUTH_PROVIDERS.filter(isSponsor)).toEqual([]);
     expect(new URL(KIMI_CHINESE_AFFILIATE_URL).hostname).toBe('platform.kimi.com');
-    expect(new URL(KIMI_INTERNATIONAL_AFFILIATE_URL).hostname).toBe('platform.kimi.ai');
   });
 
   for (const locale of ['en', 'zh-CN', 'zh-TW', 'ru']) {
-    test(`provides complete regional login translations (${locale})`, () => {
+    test(`names the login tile Kimi without a regional suffix (${locale})`, () => {
       const { auth_login: messages } = JSON.parse(
         readFileSync(`src/i18n/locales/${locale}.json`, 'utf8')
       ) as { auth_login: Record<string, string> };
-      for (const key of Object.keys(messages).filter((key) => key.startsWith('kimi_'))) {
-        if (key.startsWith('kimi_ai_') || key === 'kimi_sign_up_button') continue;
-        expect(messages[key.replace('kimi_', 'kimi_ai_')]).toBeTruthy();
-      }
-      expect(messages.kimi_oauth_title).toContain('kimi.com');
-      expect(messages.kimi_ai_oauth_title).toContain('kimi.ai');
+      expect(messages.kimi_oauth_name).toBe('Kimi');
+      expect(messages.kimi_oauth_title).not.toMatch(/国内站|中國站|China|Китай|중국/);
+      expect(messages.kimi_oauth_hint).not.toMatch(/kimi\.ai|国际站|國際站|International/);
     });
   }
 });

@@ -82,7 +82,7 @@ describe('Muse (Meta) provider and device OAuth', () => {
     expect(CALLBACK_SUPPORTED.has('meta')).toBe(false);
     expect(meta && supportsManualCallback(meta)).toBe(false);
     expect(readFileSync('src/features/oauth/hooks/useOAuthFlows.ts', 'utf8')).toContain(
-      'userCode: res.user_code'
+      'userCode: resolveOAuthUserCode(res.user_code, res.url)'
     );
 
     // 设备码步骤真实渲染：码本身 + 复制按钮，且没有回调步骤

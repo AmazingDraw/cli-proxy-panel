@@ -14,6 +14,7 @@ export function Input({
   rightElement,
   className = '',
   id,
+  style,
   ...rest
 }: InputProps) {
   const generatedId = useId();
@@ -30,6 +31,7 @@ export function Input({
         <input
           id={inputId}
           className={`input ${className}`.trim()}
+          style={rightElement ? { paddingRight: 36, ...style } : style}
           aria-invalid={Boolean(error) || rest['aria-invalid']}
           aria-describedby={describedBy}
           {...rest}

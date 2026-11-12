@@ -866,7 +866,7 @@
     "iflow_oauth_start_error": "Không thể bắt đầu iFlow OAuth:",
     "iflow_oauth_polling_error": "Không thể kiểm tra trạng thái xác thực:",
     "remote_access_disabled": "Phương thức đăng nhập này không khả dụng cho truy cập từ xa. Vui lòng truy cập từ localhost.",
-    "kimi_oauth_name": "Kimi Trung Quốc",
+    "kimi_oauth_name": "Kimi",
     "kimi_ai_oauth_name": "Kimi quốc tế",
     "sponsor_site_china": "Trung Quốc",
     "sponsor_site_international": "Quốc tế",
@@ -940,7 +940,15 @@
     "cursor_oauth_start_error": "Failed to start Cursor OAuth:",
     "cursor_oauth_polling_error": "Failed to check authentication status:",
     "cline_oauth_title": "Cline OAuth",
-    "cline_oauth_button": "Start Cline Login"
+    "cline_oauth_button": "Bắt đầu đăng nhập Cline",
+    "cline_oauth_hint": "Đăng nhập Cline bằng mã thiết bị. File xác thực được lưu tự động sau khi ủy quyền.",
+    "cline_open_link": "Mở liên kết",
+    "cline_copy_link": "Sao chép liên kết",
+    "cline_oauth_status_waiting": "Đang chờ xác thực...",
+    "cline_oauth_status_success": "Xác thực thành công!",
+    "cline_oauth_status_error": "Xác thực thất bại:",
+    "cline_oauth_start_error": "Không thể bắt đầu Cline OAuth:",
+    "cline_oauth_polling_error": "Không thể kiểm tra trạng thái xác thực:"
   },
   "stats": {
     "success": "Thành công",

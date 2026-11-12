@@ -51,7 +51,7 @@ export interface PluginOAuthProviderCard {
 
 export type OAuthProviderCard = BuiltInOAuthProviderCard | PluginOAuthProviderCard;
 
-/** 展示顺序即数组顺序：赞助商（Kimi 两站）置首，其余沿用原有次序。 */
+/** 展示顺序即数组顺序。 */
 export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
   {
     kind: 'builtin',
@@ -61,15 +61,6 @@ export const OAUTH_PROVIDERS: BuiltInOAuthProviderCard[] = [
     icon: { light: iconKimiTileBlack, dark: iconKimiTileWhite },
     flow: 'device',
     domain: 'kimi.com',
-  },
-  {
-    kind: 'builtin',
-    id: 'kimi-ai',
-    label: { key: 'auth_login.kimi_ai_oauth_name' },
-    titleKey: 'auth_login.kimi_ai_oauth_title',
-    icon: { light: iconKimiTileBlack, dark: iconKimiTileWhite },
-    flow: 'device',
-    domain: 'kimi.ai',
   },
   {
     kind: 'builtin',
