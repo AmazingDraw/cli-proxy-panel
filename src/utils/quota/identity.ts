@@ -18,7 +18,9 @@ export function getQuotaCacheKey(file: AuthFileItem): string {
 export function getQuotaDisplayName(file: AuthFileItem): string {
   if (!isDevinFile(file) && !isPluginQuotaFile(file)) return file.name;
   const identity = file.email?.trim() || normalizeRecentRequestAuthIndex(file.authIndex);
-  return identity ? `${file.name} · ${identity}` : file.name;
+  // Skip appending when the filename already embeds the identity (e.g. devin-<email>.json).
+  if (!identity || file.name.toLowerCase().includes(identity.toLowerCase())) return file.name;
+  return `${file.name} · ${identity}`;
 }
 
 /** Resolve a cache identity back to the physical filename used by file mutations. */
